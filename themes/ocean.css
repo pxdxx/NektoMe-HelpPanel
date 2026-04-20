@@ -1,0 +1,487 @@
+/* Ocean — спокойный сине-бирюзовый, мягкий градиент фона */
+:root {
+  --githubdark-text-color: #d8eef5;
+  --githubdark-text2-color: #d8eef5;
+  --githubdark-background-color: #0c1a22;
+  --githubdark-link-color: #5eead4;
+  --githubdark-modal-background: #0f2430;
+  --githubdark-checkbox-background-color: #163240;
+  --githubdark-active-checkbox-background-color: #0e7490;
+  --githubdark-disabled-checkbox-background-color: #163240;
+  --githubdark-checkbox-border-color: #2dd4bf;
+  --githubdark-active-checkbox-border-color: #052028;
+  --githubdark-disabled-checkbox-border-color: #163240;
+  --githubdark-button-scan-color: #14b8a6;
+  --githubdark-button-stop-color: #fb7185;
+  --githubdark-button-stop-talk-color: #5eead4;
+  --githubdark-button-continue-color: #14b8a6;
+  --githubdark-button-got-color: #14b8a6;
+  --githubdark-body-background: linear-gradient(165deg, #041a24 0%, #073544 38%, #0a4a5c 72%, #062a36 100%);
+  --githubdark-header-background-color: #0d2530;
+  --githubdark-header-text-color: #e8fbff;
+  --githubdark-header-border-color: #239cba;
+  --githubdark-active-talk-color: #052028;
+  --githubdark-active-talk-status-messages-color: #052028;
+  --githubdark-danger-color: #f87171;
+  --githubdark-stop-talk-confirm-background: #0f2430;
+  --pastel-text-color: #94b8c9;
+  --nekto-talking-grad: linear-gradient(135deg, rgba(13, 148, 136, 0.95), rgba(45, 212, 191, 0.88));
+  --nekto-talking-shadow: 0 0 18px rgba(45, 212, 191, 0.45);
+  --nekto-scan-bg: #0d9488;
+  --nekto-scan-hover: #2dd4bf;
+  --nekto-stop-talk-bg: #155e75;
+  --nekto-stop-talk-hover: #0e7490;
+  --nekto-slider-dot: #5eead4;
+  --nekto-slider-process: #14b8a6;
+  --nekto-nekto-badge: #0f766e;
+}
+
+body.night_theme .navbar.navbar-inverse.navbar-fixed-top,
+body.night_theme .hidden-xs,
+body.night_theme .hidden-sm,
+body.night_theme .col-sm-1,
+body.night_theme .col-md-4,
+body.night_theme .col-lg-3,
+body.night_theme .audio-chat .description,
+body.night_theme .audio-chat .join,
+body.night_theme .audio-chat div > a[href*="play.google.com"],
+body.night_theme .audio-chat div > a[href*="nekto.me/ios-chat-ruletka"],
+body.night_theme .audio-chat h1.chat,
+body.night_theme .audio-chat .companion-label,
+body.night_theme .audio-chat span.chat {
+  display: none !important;
+}
+
+body.night_theme .audio-chat div > h1.chat,
+body.night_theme .audio-chat div[style*=""] > h1.chat,
+body.night_theme .audio-chat div[style=""] > h1.chat {
+  display: none !important;
+}
+
+body.night_theme .audio-chat .talking {
+  display: inline-block !important;
+  font-size: 20px !important;
+  font-weight: bold !important;
+  color: #c9d1d9 !important;
+  background: var(--nekto-talking-grad) !important;
+  padding: 10px 25px !important;
+  border-radius: 14px !important;
+  box-shadow: var(--nekto-talking-shadow) !important;
+  position: absolute !important;
+  top: 15px !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  z-index: 1000 !important;
+  margin-bottom: 20px !important;
+}
+
+body.night_theme .audio-chat .talking .talking-count {
+  display: inline !important;
+  margin-right: 8px !important;
+  font-size: 20px !important;
+  color: #c9d1d9 !important;
+  background: none !important;
+  padding: 0 !important;
+}
+
+body.night_theme .audio-chat .header.header_chat {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  background: var(--githubdark-header-background-color) !important;
+  border-color: var(--githubdark-header-border-color) !important;
+  padding: 4px 10px !important;
+  position: relative !important;
+}
+
+body.night_theme .audio-chat .header.header_chat span {
+  color: var(--githubdark-header-text-color) !important;
+}
+
+body.night_theme {
+  background: var(--githubdark-body-background) !important;
+}
+
+body.night_theme .adv-block {
+  color: var(--githubdark-text-color) !important;
+}
+
+body.night_theme .adv-block a {
+  color: var(--githubdark-link-color) !important;
+}
+
+body.night_theme .advBox {
+  background: var(--githubdark-background-color) !important;
+}
+
+body.night_theme #audio-chat-container div.mask_error {
+  background: var(--githubdark-background-color) !important;
+  color: var(--githubdark-text-color) !important;
+}
+
+body.night_theme .tabs_type_chats div:last-child {
+  background: var(--githubdark-background-color) !important;
+  color: var(--githubdark-text-color) !important;
+}
+
+body.night_theme .chat_container .audio-chat,
+body.night_theme .chat_container .audio-chat > div {
+  background: var(--githubdark-background-color) !important;
+  color: var(--githubdark-text-color) !important;
+}
+
+body.night_theme .audio-chat .filter-label {
+  color: var(--githubdark-text-color) !important;
+}
+
+body.night_theme .audio-chat .talk-label,
+body.night_theme .audio-chat .timer-label {
+  color: var(--pastel-text-color) !important;
+}
+
+body.night_theme .audio-chat .users-count-panel,
+body.night_theme .audio-chat .loading {
+  color: #c9d1d9 !important;
+}
+
+body.night_theme .audio-chat .complain-button {
+  color: #c9d1d9 !important;
+  border-bottom: 1px dotted var(--githubdark-danger-color) !important;
+}
+
+body.night_theme .audio-chat .btn,
+body.night_theme .audio-chat .btn-default,
+body.night_theme .audio-chat .btn-default.checked,
+body.night_theme .audio-chat .mute-button,
+body.night_theme .audio-chat .stop-talk-button {
+  border-color: #0d1117 !important;
+  outline: none !important;
+}
+
+body.night_theme .audio-chat .btn:focus,
+body.night_theme .audio-chat .btn:active {
+  box-shadow: none !important;
+}
+
+body.night_theme .audio-chat .btn-default {
+  background: var(--githubdark-checkbox-background-color) !important;
+  border-color: #0d1117 !important;
+  color: #c9d1d9 !important;
+  text-align: center !important;
+}
+
+body.night_theme .audio-chat .btn-default.checked {
+  background: var(--githubdark-active-checkbox-background-color) !important;
+  border-color: #0d1117 !important;
+  color: #c9d1d9 !important;
+  text-align: center !important;
+}
+
+body.night_theme .audio-chat .btn-default.disabled:not(.checked) {
+  background: var(--githubdark-disabled-checkbox-background-color) !important;
+  border-color: #0d1117 !important;
+  color: #c9d1d9 !important;
+  text-align: center !important;
+}
+
+body.night_theme .audio-chat .scan-button,
+body.night_theme .audio-chat .go-scan-button {
+  background-image: none !important;
+  background-color: var(--nekto-scan-bg) !important;
+  color: #0d1117 !important;
+  font-size: 18px !important;
+  font-weight: bold !important;
+  text-align: center !important;
+  padding: 12px 30px !important;
+  border-radius: 8px !important;
+  border: 2px solid #0d1117 !important;
+}
+
+body.night_theme .audio-chat .scan-button:hover,
+body.night_theme .audio-chat .go-scan-button:hover {
+  background-color: var(--nekto-scan-hover) !important;
+}
+
+body.night_theme .audio-chat .go-idle-button {
+  background-image: none !important;
+  background-color: #f85149 !important;
+  color: #c9d1d9 !important;
+  font-size: 18px !important;
+  font-weight: bold !important;
+  text-align: center !important;
+  padding: 12px 30px !important;
+  border-radius: 8px !important;
+  border: 2px solid #0d1117 !important;
+}
+
+body.night_theme .audio-chat .buttons-panel {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  gap: 20px !important;
+  padding: 20px 0 !important;
+}
+
+body.night_theme .audio-chat .stop-talk-button,
+body.night_theme .audio-chat .mute-button {
+  background-image: none !important;
+  background-color: var(--nekto-stop-talk-bg) !important;
+  color: #0d1117 !important;
+  font-size: 18px !important;
+  font-weight: bold !important;
+  text-align: center !important;
+  padding: 12px 30px !important;
+  border-radius: 8px !important;
+  border: 2px solid #0d1117 !important;
+  min-width: 140px !important;
+  height: 48px !important;
+  line-height: 24px !important;
+}
+
+body.night_theme .audio-chat .stop-talk-button:hover,
+body.night_theme .audio-chat .mute-button:hover {
+  background-color: var(--nekto-stop-talk-hover) !important;
+}
+
+body.night_theme .audio-chat .stop-and-complain-button,
+body.night_theme .audio-chat .cache_muted_button,
+body.night_theme .audio-chat .mute-toast {
+  display: none !important;
+}
+
+body.night_theme .audio-chat .volume_slider {
+  width: 70px !important;
+  height: 30px !important;
+  margin: 0 auto !important;
+  vertical-align: middle !important;
+  overflow: visible !important;
+  background: none !important;
+  transform: translateY(8px) !important;
+  display: block !important;
+}
+
+body.night_theme .audio-chat .volume_slider::after {
+  display: none !important;
+  content: none !important;
+}
+
+body.night_theme .audio-chat .vue-range-slider.slider-component.slider-horizontal {
+  width: 70px !important;
+  padding: 5px 0 !important;
+  display: block !important;
+  margin: 0 auto !important;
+}
+
+body.night_theme .audio-chat .volume_slider .slider {
+  height: 4px !important;
+  background: #21262d !important;
+  border-radius: 2px !important;
+}
+
+body.night_theme .audio-chat .volume_slider .slider-dot {
+  width: 10px !important;
+  height: 10px !important;
+  top: -3px !important;
+  background: var(--nekto-slider-dot) !important;
+  border-radius: 50% !important;
+  box-shadow: 0 0 5px rgba(199, 88, 255, 0.8) !important;
+}
+
+body.night_theme .audio-chat .volume_slider .slider-process {
+  height: 4px !important;
+  background: var(--nekto-slider-process) !important;
+  border-radius: 2px !important;
+}
+
+body.night_theme .audio-chat .volume_slider .slider-tooltip {
+  font-size: 12px !important;
+  color: #c9d1d9 !important;
+  background: #161b22 !important;
+  padding: 2px 6px !important;
+  border-radius: 3px !important;
+}
+
+body.night_theme .audio-chat .volume_slider .merged-tooltip {
+  display: none !important;
+}
+
+body.night_theme .audio-chat .volume_slider .slider-piecewise {
+  display: none !important;
+}
+
+body.night_theme .audio-chat .volume_slider input[type="range"] {
+  display: none !important;
+}
+
+body.night_theme .audio-chat .nekto {
+  background-color: var(--nekto-nekto-badge) !important;
+  color: #0d1117 !important;
+}
+
+body.night_theme .audio-chat .nekto:after {
+  border-color: #0d1117 !important;
+}
+
+body.night_theme .audio-chat .peer-problem-label {
+  color: var(--githubdark-danger-color) !important;
+}
+
+body.night_theme .popup-panel {
+  background: var(--githubdark-stop-talk-confirm-background) !important;
+}
+
+body.night_theme .popup-content .question {
+  color: var(--githubdark-text2-color) !important;
+  border-color: var(--githubdark-text2-color) !important;
+}
+
+body.night_theme .popup-content .title,
+body.night_theme .audio-chat .content {
+  color: #c9d1d9 !important;
+}
+
+body.night_theme .popup-content .btn.cancel {
+  background-color: #21262d !important;
+  color: #c9d1d9 !important;
+  border: 2px solid #0d1117 !important;
+  text-align: center !important;
+}
+
+body.night_theme .popup-content .btn.cancel:hover {
+  background-color: #58a6ff !important;
+}
+
+body.night_theme .popup-content .btn.finish {
+  background-color: #58a6ff !important;
+  color: #0d1117 !important;
+  border: 2px solid #0d1117 !important;
+  text-align: center !important;
+}
+
+body.night_theme .popup-content .btn.finish:hover {
+  background-color: #388bfd !important;
+}
+
+body.night_theme .audio-chat .hangup .talk-label {
+  color: var(--pastel-text-color) !important;
+}
+
+body.night_theme .audio-chat .hangup .complain-button {
+  color: #c9d1d9 !important;
+}
+
+body.night_theme .swal2-modal {
+  background-color: #161b22 !important;
+}
+
+body.night_theme .swal2-validation-message {
+  background-color: #161b22 !important;
+}
+
+body.night_theme .swal2-modal .swal2-content ul li,
+body.night_theme .swal2-modal .swal2-content div,
+body.night_theme .swal2-modal .swal2-title {
+  color: #c9d1d9 !important;
+}
+
+body.night_theme .swal2-modal.swal2-popup .swal2-actions:not(.swal2-loading) .swal2-styled.swal2-confirm {
+  background-color: #58a6ff !important;
+  color: #0d1117 !important;
+  border: 2px solid #0d1117 !important;
+  text-align: center !important;
+}
+
+body.night_theme .banPopup.swal2-modal.swal2-popup .swal2-actions:not(.swal2-loading) .swal2-styled.swal2-confirm {
+  background-color: #388bfd !important;
+  color: #0d1117 !important;
+  border: 2px solid #0d1117 !important;
+  text-align: center !important;
+}
+
+body.night_theme .swal2-modal .swal2-actions:not(.swal2-loading) .swal2-confirm:hover,
+body.night_theme .swal2-modal .swal2-actions .swal2-cancel:hover {
+  background-color: #58a6ff !important;
+}
+
+body.night_theme .swal2-modal .swal2-actions .swal2-cancel {
+  background-color: #58a6ff !important;
+  color: #0d1117 !important;
+  border: 2px solid #0d1117 !important;
+  text-align: center !important;
+}
+
+body.night_theme .audio-chat .sex-filter-panel,
+body.night_theme .audio-chat .age-filter-panel,
+body.night_theme .audio-chat .theme-filter-panel {
+  width: 100%;
+  margin-top: 50px;
+}
+
+body.night_theme .header_chat h1.chat,
+body.night_theme .header_chat > div:first-child span.chat {
+  visibility: hidden;
+}
+
+body.night_theme .header_chat > div:last-child {
+  color: transparent;
+  font-size: 0;
+}
+
+body.night_theme .audio-chat .stop-scan-button,
+body.night_theme .audio-chat .go-idle-button {
+  background-color: transparent;
+  color: #c9d1d9 !important;
+  border-color: var(--githubdark-button-stop-color);
+  border-width: 2px;
+}
+
+body.night_theme .audio-chat .btn,
+body.night_theme .audio-chat .btn-default,
+body.night_theme .audio-chat .btn-default.checked,
+body.night_theme .audio-chat .mute-button,
+body.night_theme .audio-chat .stop-talk-button {
+  border-color: #0d1117 !important;
+  outline: none !important;
+  font-size: 18px !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 15px;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  box-sizing: border-box;
+}
+
+body.night_theme .audio-chat .go-idle-button:hover {
+  background-color: #388bfd !important;
+}
+
+body.night_theme .audio-chat .mute-button {
+  position: relative;
+  border-color: #0d1117 !important;
+  outline: none !important;
+  font-size: 18px !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 15px;
+  min-width: 140px;
+  height: 40px;
+  overflow: hidden;
+}
+
+body.night_theme .audio-chat .mute-button::after {
+  content: "Микро Вкл" !important;
+  font-size: 18px !important;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  white-space: nowrap;
+}
+
+body.night_theme .audio-chat .mute-button.muted::after {
+  content: "Микро Выкл" !important;
+}

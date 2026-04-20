@@ -1,0 +1,32 @@
+/* Правки вёрстки nekto под расширение — грузится после тем, чтобы не перебивалось */
+html {
+  overflow-x: hidden !important;
+  max-width: 100%;
+}
+
+body.night_theme {
+  overflow-x: hidden !important;
+}
+
+body.night_theme .audio-chat .theme-filter-panel {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  text-align: center !important;
+  width: 100% !important;
+}
+
+body.night_theme .audio-chat .theme-filter-panel .filter-label {
+  text-align: center !important;
+  width: 100% !important;
+  display: block !important;
+}
+
+body.night_theme .audio-chat .theme-filter-panel > div {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  flex-wrap: wrap !important;
+  gap: 8px !important;
+  width: 100% !important;
+}

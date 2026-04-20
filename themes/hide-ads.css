@@ -1,0 +1,43 @@
+/* Скрытие рекламы и боковых промо-блоков — логика как в pulse-talk.css */
+body.night_theme .navbar.navbar-inverse.navbar-fixed-top,
+body.night_theme .hidden-xs,
+body.night_theme .hidden-sm,
+body.night_theme .col-sm-1,
+body.night_theme .col-md-4,
+body.night_theme .col-lg-3,
+body.night_theme .audio-chat .description,
+body.night_theme .audio-chat .join,
+body.night_theme .audio-chat div > a[href*="play.google.com"],
+body.night_theme .audio-chat div > a[href*="nekto.me/ios-chat-ruletka"],
+body.night_theme .audio-chat h1.chat,
+body.night_theme .audio-chat .companion-label,
+body.night_theme .audio-chat span.chat {
+  display: none !important;
+}
+
+body.night_theme .audio-chat div > h1.chat,
+body.night_theme .audio-chat div[style*=""] > h1.chat,
+body.night_theme .audio-chat div[style=""] > h1.chat {
+  display: none !important;
+}
+
+body.night_theme .adv-block,
+body.night_theme .adsbygoogle,
+body.night_theme iframe[src*="googlesyndication"],
+body.night_theme iframe[src*="doubleclick"],
+body.night_theme iframe[src*="googletagservices"],
+body.night_theme iframe[src*="yandex.ru/ads"],
+body.night_theme [class*="advBox" i],
+body.night_theme [id*="google_ads"],
+body.night_theme [data-ad-client],
+body.night_theme [data-ad-slot] {
+  display: none !important;
+  visibility: hidden !important;
+  height: 0 !important;
+  max-height: 0 !important;
+  overflow: hidden !important;
+  pointer-events: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+}

@@ -1,0 +1,353 @@
+/* Компактное «окошко» у правого края + вылетающая панель слева от него */
+#nekto-ext-root {
+  --nekto-surface: rgba(22, 22, 26, 0.92);
+  --nekto-flyout: rgba(28, 28, 32, 0.97);
+  --nekto-border: rgba(255, 255, 255, 0.1);
+  --nekto-text: rgba(250, 250, 252, 0.95);
+  --nekto-muted: rgba(250, 250, 252, 0.45);
+  --nekto-accent: #5eead4;
+  --nekto-accent-dim: rgba(94, 234, 212, 0.18);
+  --nekto-danger: #fb7185;
+  --nekto-font: "Inter", "Segoe UI", system-ui, sans-serif;
+
+  position: fixed;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+  z-index: 2147483646;
+  font-family: var(--nekto-font);
+  font-size: 13px;
+  color: var(--nekto-text);
+  pointer-events: none;
+  box-sizing: border-box;
+}
+
+#nekto-ext-root * {
+  box-sizing: border-box;
+}
+
+.nekto-ext__dock {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  pointer-events: auto;
+  filter: drop-shadow(-4px 8px 24px rgba(0, 0, 0, 0.35));
+  min-height: 0;
+}
+
+/* Кнопки-иконки у правой «стенки» — высота как у открытой панели */
+.nekto-ext__launcher {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 6px;
+  background: var(--nekto-surface);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--nekto-border);
+  border-right: none;
+  border-radius: 14px 0 0 14px;
+  align-self: stretch;
+  flex: 0 0 auto;
+  min-width: 56px;
+}
+
+/* Открыта вкладка: стык без «вырезов» — слева вкладка с радиусом к контенту, справа полоска кнопок с радиусом к краю экрана */
+#nekto-ext-root.nekto-ext--open .nekto-ext__flyout-inner {
+  border-radius: 14px 0 0 14px;
+  border-right: none;
+  background: var(--nekto-flyout);
+}
+
+#nekto-ext-root.nekto-ext--open .nekto-ext__launcher {
+  border-radius: 0 14px 14px 0;
+  border-left: none;
+  background: var(--nekto-flyout);
+}
+
+.nekto-ext__icon-btn {
+  appearance: none;
+  margin: 0;
+  padding: 0;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--nekto-muted);
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.nekto-ext__icon-btn:hover {
+  color: var(--nekto-text);
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.nekto-ext__icon-btn[data-active="true"] {
+  color: var(--nekto-accent);
+  background: var(--nekto-accent-dim);
+  box-shadow: 0 0 0 1px rgba(94, 234, 212, 0.25);
+}
+
+.nekto-ext__icon-btn svg {
+  flex-shrink: 0;
+  pointer-events: none;
+}
+
+/* Вылет слева от кнопок: в закрытом состоянии не занимает высоту */
+.nekto-ext__flyout {
+  width: 0;
+  min-width: 0;
+  max-width: 0;
+  max-height: 0;
+  min-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  align-self: stretch;
+  flex: 0 0 0;
+  transition:
+    width 0.2s ease,
+    min-width 0.2s ease,
+    max-width 0.2s ease,
+    max-height 0.22s ease,
+    opacity 0.18s ease;
+}
+
+#nekto-ext-root.nekto-ext--open .nekto-ext__flyout {
+  width: min(300px, calc(100vw - 72px));
+  min-width: min(300px, calc(100vw - 72px));
+  max-width: min(300px, calc(100vw - 72px));
+  max-height: min(520px, 78vh);
+  flex: 0 1 auto;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.nekto-ext__flyout-inner {
+  width: min(300px, calc(100vw - 72px));
+  max-height: min(520px, 78vh);
+  min-height: 0;
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  background: var(--nekto-flyout);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--nekto-border);
+  border-right: none;
+  border-radius: 14px 0 0 14px;
+  overflow: hidden;
+}
+
+#nekto-ext-root.nekto-ext--open .nekto-ext__dock {
+  filter: drop-shadow(-6px 10px 28px rgba(0, 0, 0, 0.4));
+}
+
+.nekto-ext__flyout-head {
+  padding: 12px 14px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--nekto-muted);
+  border-bottom: 1px solid var(--nekto-border);
+}
+
+.nekto-ext__flyout-body {
+  flex: 1;
+  overflow: auto;
+  padding: 14px;
+  min-height: 0;
+}
+
+.nekto-ext__flyout-body::-webkit-scrollbar {
+  width: 6px;
+}
+.nekto-ext__flyout-body::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 99px;
+}
+
+.nekto-ext__section {
+  display: none;
+}
+.nekto-ext__section[data-visible="true"] {
+  display: block;
+}
+
+.nekto-ext__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.nekto-ext__label {
+  color: var(--nekto-text);
+  font-weight: 500;
+  font-size: 13px;
+}
+
+.nekto-ext__hint {
+  font-size: 11px;
+  color: var(--nekto-muted);
+  line-height: 1.45;
+  margin: -6px 0 14px;
+}
+
+.nekto-ext__switch {
+  position: relative;
+  width: 44px;
+  height: 26px;
+  flex-shrink: 0;
+}
+.nekto-ext__switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+  position: absolute;
+}
+.nekto-ext__switch span {
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 99px;
+  transition: background 0.2s ease;
+  cursor: pointer;
+}
+.nekto-ext__switch span::after {
+  content: "";
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  left: 3px;
+  top: 3px;
+  background: #fff;
+  border-radius: 50%;
+  transition: transform 0.2s ease;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.35);
+}
+.nekto-ext__switch input:checked + span {
+  background: rgba(94, 234, 212, 0.45);
+}
+.nekto-ext__switch input:checked + span::after {
+  transform: translateX(18px);
+}
+
+.nekto-ext__btn {
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 1px solid var(--nekto-border);
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--nekto-text);
+  font-weight: 600;
+  font-size: 12px;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+.nekto-ext__btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.14);
+}
+.nekto-ext__btn--danger {
+  border-color: rgba(251, 113, 133, 0.35);
+  color: #fecdd3;
+}
+.nekto-ext__btn--danger:hover {
+  background: rgba(251, 113, 133, 0.12);
+}
+
+.nekto-ext__stat-grid {
+  display: grid;
+  gap: 10px;
+}
+.nekto-ext__stat {
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--nekto-border);
+}
+.nekto-ext__stat b {
+  display: block;
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: var(--nekto-text);
+  margin-bottom: 2px;
+}
+.nekto-ext__stat span {
+  font-size: 10px;
+  color: var(--nekto-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.nekto-ext__theme-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.nekto-ext__theme {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid var(--nekto-border);
+  background: rgba(255, 255, 255, 0.03);
+  cursor: pointer;
+  text-align: left;
+  color: inherit;
+  font: inherit;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+.nekto-ext__theme:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+.nekto-ext__theme[data-active="true"] {
+  border-color: rgba(94, 234, 212, 0.5);
+  background: var(--nekto-accent-dim);
+}
+.nekto-ext__theme-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.12);
+}
+
+.nekto-ext__theme-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin-left: auto;
+  color: var(--nekto-muted);
+  flex-shrink: 0;
+}
+
+.nekto-ext__theme-arrow svg {
+  display: block;
+}
+
+/* Скрыть «Светлая» в блоке цветовой схемы nekto (остаётся только тёмная) */
+body .theme-filter-panel .btn-default.nekto-ext-site-light-hidden {
+  display: none !important;
+  pointer-events: none !important;
+}
+
+#nekto-ext-skip-now {
+  margin-top: 12px;
+}

@@ -1,0 +1,30 @@
+{
+  "manifest_version": 3,
+  "name": "Nekto Voice Panel",
+  "version": "1.0.0",
+  "description": "Панель для голосовой чат-рулетки nekto.me: авто-скип, темы, статистика.",
+  "permissions": ["storage"],
+  "host_permissions": ["https://nekto.me/*", "https://www.nekto.me/*"],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://nekto.me/audiochat*",
+        "https://nekto.me/*/audiochat*",
+        "https://www.nekto.me/audiochat*",
+        "https://www.nekto.me/*/audiochat*"
+      ],
+      "js": ["content/main.js"],
+      "css": ["content/panel.css"],
+      "run_at": "document_idle"
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["themes/*.css"],
+      "matches": ["https://nekto.me/*", "https://www.nekto.me/*"]
+    }
+  ]
+}
