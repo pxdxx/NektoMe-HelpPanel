@@ -1,0 +1,107 @@
+/*
+ * Плавные переходы между экранами: параметры → поиск → звонок → конец разговора.
+ * Сайт (Vue) пересоздаёт элементы при смене экрана, поэтому анимации появления
+ * срабатывают сами. Включается классом html.nx-anim, работает с любой темой.
+ */
+
+@keyframes nx-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes nx-rise {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes nx-pop {
+  from { opacity: 0; transform: scale(0.92); }
+  to { opacity: 1; transform: none; }
+}
+
+/* Смена экранов */
+html.nx-anim .audio-chat .chat-step {
+  animation: nx-rise 0.38s cubic-bezier(0.22, 0.8, 0.3, 1) both;
+}
+
+html.nx-anim .callScreen {
+  animation: nx-fade 0.35s ease both;
+}
+
+/* Поиск собеседника */
+html.nx-anim .search_loader {
+  animation: nx-pop 0.45s cubic-bezier(0.22, 0.8, 0.3, 1) both;
+}
+html.nx-anim .search_text,
+html.nx-anim .long_search_text {
+  animation: nx-fade 0.4s ease 0.08s both;
+}
+
+/* Найден собеседник / разговор завершён */
+html.nx-anim .callScreen__round {
+  animation: nx-pop 0.45s cubic-bezier(0.22, 0.8, 0.3, 1) both;
+}
+html.nx-anim .callScreen__topMainText,
+html.nx-anim .callScreen__finishText,
+html.nx-anim .callScreen__name {
+  animation: nx-rise 0.35s cubic-bezier(0.22, 0.8, 0.3, 1) 0.05s both;
+}
+html.nx-anim .callScreen__buttonsLine {
+  animation: nx-rise 0.35s cubic-bezier(0.22, 0.8, 0.3, 1) 0.1s both;
+}
+html.nx-anim .callScreen__topErrors {
+  animation: nx-fade 0.3s ease both;
+}
+
+/* Иконка собеседника плавно меняет цвет при завершении разговора */
+html.nx-anim .callScreen__roundSvg .call-big-round__border,
+html.nx-anim .callScreen__roundSvg .call-big-round__circle,
+html.nx-anim .callScreen__roundSvg .call-big-round__question {
+  transition: fill 0.45s ease;
+}
+
+/* Плашки с transform: translateX(-50%) — только прозрачность, чтобы не сбить позицию */
+html.nx-anim .callScreen__complaintSentMessage,
+html.nx-anim .mute-toast,
+html.nx-anim .responsiveMessenger__notification {
+  animation: nx-fade 0.25s ease both;
+}
+
+/* Текстовый чат */
+html.nx-anim .responsiveMessenger {
+  animation: nx-rise 0.32s cubic-bezier(0.22, 0.8, 0.3, 1) both;
+}
+html.nx-anim .responsiveMessenger__messagesGroup {
+  animation: nx-rise 0.22s ease-out both;
+}
+html.nx-anim .responsiveMessenger__message {
+  animation: nx-fade 0.2s ease-out both;
+}
+
+/* Кнопки плавно меняют состояние */
+html.nx-anim .callScreen .btn,
+html.nx-anim .audio-chat .btn-default,
+html.nx-anim .btnNekto {
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease, opacity 0.2s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html.nx-anim .audio-chat .chat-step,
+  html.nx-anim .callScreen,
+  html.nx-anim .search_loader,
+  html.nx-anim .search_text,
+  html.nx-anim .long_search_text,
+  html.nx-anim .callScreen__round,
+  html.nx-anim .callScreen__topMainText,
+  html.nx-anim .callScreen__finishText,
+  html.nx-anim .callScreen__name,
+  html.nx-anim .callScreen__buttonsLine,
+  html.nx-anim .callScreen__topErrors,
+  html.nx-anim .callScreen__complaintSentMessage,
+  html.nx-anim .mute-toast,
+  html.nx-anim .responsiveMessenger,
+  html.nx-anim .responsiveMessenger__messagesGroup,
+  html.nx-anim .responsiveMessenger__message {
+    animation: none !important;
+  }
+}

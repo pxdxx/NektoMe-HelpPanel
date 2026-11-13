@@ -1,6 +1,5 @@
 /* Компактное «окошко» у правого края + вылетающая панель слева от него */
 #nekto-ext-root {
-  --nekto-surface: rgba(22, 22, 26, 0.92);
   --nekto-flyout: rgba(28, 28, 32, 0.97);
   --nekto-border: rgba(255, 255, 255, 0.1);
   --nekto-text: rgba(250, 250, 252, 0.95);
@@ -8,6 +7,8 @@
   --nekto-accent: #5eead4;
   --nekto-accent-dim: rgba(94, 234, 212, 0.18);
   --nekto-danger: #fb7185;
+  --nekto-control: rgba(255, 255, 255, 0.04);
+  --nekto-control-hover: rgba(255, 255, 255, 0.08);
   --nekto-font: "Inter", "Segoe UI", system-ui, sans-serif;
 
   position: fixed;
@@ -20,22 +21,35 @@
   color: var(--nekto-text);
   pointer-events: none;
   box-sizing: border-box;
+  color-scheme: dark;
 }
 
 #nekto-ext-root * {
   box-sizing: border-box;
 }
 
+/*
+ * Панель: полоска кнопок у правого края + вкладка, выезжающая слева.
+ * У обеих частей одинаковые фон, размытие и рамка, поэтому стык не виден.
+ * Размытый фон вкладки фиксированной ширины — при открытии он «выезжает»,
+ * а не растягивается, так анимация остаётся плавной.
+ */
 .nekto-ext__dock {
   display: flex;
   flex-direction: row;
   align-items: stretch;
-  pointer-events: auto;
-  filter: drop-shadow(-4px 8px 24px rgba(0, 0, 0, 0.35));
   min-height: 0;
+  pointer-events: auto;
+  border-radius: 16px 0 0 16px;
+  box-shadow: -6px 10px 28px rgba(0, 0, 0, 0.38);
+  transition: box-shadow 0.2s ease;
 }
 
-/* Кнопки-иконки у правой «стенки» — высота как у открытой панели */
+#nekto-ext-root.nekto-ext--open .nekto-ext__dock {
+  box-shadow: -8px 12px 34px rgba(0, 0, 0, 0.45);
+}
+
+/* Кнопки-иконки у правого края: правая сторона всегда прямая, вплотную к краю экрана */
 .nekto-ext__launcher {
   display: flex;
   flex-direction: column;
@@ -43,28 +57,20 @@
   justify-content: center;
   gap: 6px;
   padding: 8px 6px;
-  background: var(--nekto-surface);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid var(--nekto-border);
-  border-right: none;
-  border-radius: 14px 0 0 14px;
-  align-self: stretch;
   flex: 0 0 auto;
   min-width: 56px;
-}
-
-/* Открыта вкладка: стык без «вырезов» — слева вкладка с радиусом к контенту, справа полоска кнопок с радиусом к краю экрана */
-#nekto-ext-root.nekto-ext--open .nekto-ext__flyout-inner {
-  border-radius: 14px 0 0 14px;
+  background: var(--nekto-flyout);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--nekto-border);
   border-right: none;
-  background: var(--nekto-flyout);
+  border-radius: 16px 0 0 16px;
 }
 
+/* Открыта вкладка: кнопки продолжают её без скруглений и без рамки на стыке */
 #nekto-ext-root.nekto-ext--open .nekto-ext__launcher {
-  border-radius: 0 14px 14px 0;
   border-left: none;
-  background: var(--nekto-flyout);
+  border-radius: 0;
 }
 
 .nekto-ext__icon-btn {
@@ -92,7 +98,7 @@
 .nekto-ext__icon-btn[data-active="true"] {
   color: var(--nekto-accent);
   background: var(--nekto-accent-dim);
-  box-shadow: 0 0 0 1px rgba(94, 234, 212, 0.25);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--nekto-accent) 30%, transparent);
 }
 
 .nekto-ext__icon-btn svg {
@@ -144,13 +150,10 @@
   -webkit-backdrop-filter: blur(20px);
   border: 1px solid var(--nekto-border);
   border-right: none;
-  border-radius: 14px 0 0 14px;
+  border-radius: 16px 0 0 16px;
   overflow: hidden;
 }
 
-#nekto-ext-root.nekto-ext--open .nekto-ext__dock {
-  filter: drop-shadow(-6px 10px 28px rgba(0, 0, 0, 0.4));
-}
 
 .nekto-ext__flyout-head {
   padding: 12px 14px;
@@ -198,11 +201,17 @@
   font-size: 13px;
 }
 
+.nekto-ext__label-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
 .nekto-ext__hint {
   font-size: 11px;
   color: var(--nekto-muted);
-  line-height: 1.45;
-  margin: -6px 0 14px;
+  line-height: 1.35;
 }
 
 .nekto-ext__switch {
@@ -238,7 +247,10 @@
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.35);
 }
 .nekto-ext__switch input:checked + span {
-  background: rgba(94, 234, 212, 0.45);
+  background: color-mix(in srgb, var(--nekto-accent) 55%, transparent);
+}
+.nekto-ext__switch input:focus-visible + span {
+  box-shadow: 0 0 0 3px var(--nekto-accent-dim);
 }
 .nekto-ext__switch input:checked + span::after {
   transform: translateX(18px);
@@ -270,7 +282,11 @@
 
 .nekto-ext__stat-grid {
   display: grid;
-  gap: 10px;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+.nekto-ext__stat--wide {
+  grid-column: 1 / -1;
 }
 .nekto-ext__stat {
   padding: 12px 14px;
@@ -280,9 +296,11 @@
 }
 .nekto-ext__stat b {
   display: block;
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 700;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
   color: var(--nekto-text);
   margin-bottom: 2px;
 }
@@ -318,7 +336,7 @@
   background: rgba(255, 255, 255, 0.06);
 }
 .nekto-ext__theme[data-active="true"] {
-  border-color: rgba(94, 234, 212, 0.5);
+  border-color: color-mix(in srgb, var(--nekto-accent) 55%, transparent);
   background: var(--nekto-accent-dim);
 }
 .nekto-ext__theme-dot {
@@ -329,16 +347,23 @@
   box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.12);
 }
 
-.nekto-ext__theme-arrow {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  margin-left: auto;
-  color: var(--nekto-muted);
-  flex-shrink: 0;
+.nekto-ext__theme-name {
+  flex: 1;
+  font-weight: 500;
+  color: var(--nekto-text);
 }
 
-.nekto-ext__theme-arrow svg {
+.nekto-ext__theme-check {
+  display: flex;
+  align-items: center;
+  color: var(--nekto-accent);
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+.nekto-ext__theme[data-active="true"] .nekto-ext__theme-check {
+  opacity: 1;
+}
+.nekto-ext__theme-check svg {
   display: block;
 }
 
@@ -349,5 +374,757 @@ body .theme-filter-panel .btn-default.nekto-ext-site-light-hidden {
 }
 
 #nekto-ext-skip-now {
+  margin-top: 4px;
+}
+
+#nekto-ext-reset-stats {
   margin-top: 12px;
+}
+
+#nekto-ext-reset-settings {
+  margin-top: 8px;
+}
+
+.nekto-ext__btn:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.nekto-ext__btn--ghost {
+  background: transparent;
+  color: var(--nekto-muted);
+  font-weight: 500;
+}
+.nekto-ext__btn--ghost:hover {
+  color: var(--nekto-text);
+}
+
+.nekto-ext__icon-btn:focus-visible,
+.nekto-ext__btn:focus-visible,
+.nekto-ext__theme:focus-visible {
+  outline: 2px solid var(--nekto-accent);
+  outline-offset: 2px;
+}
+
+/* ───────── Вкладка «Звук» ───────── */
+
+.nekto-ext__field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+/* Выпадающий список устройств — раскрывается внутри панели, в цветах темы */
+.nekto-ext__dropdown {
+  position: relative;
+}
+
+.nekto-ext__dropdown-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 9px 10px 9px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--nekto-border);
+  background: var(--nekto-control);
+  color: var(--nekto-text);
+  font: inherit;
+  font-size: 12px;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+.nekto-ext__dropdown-btn:hover {
+  background: var(--nekto-control-hover);
+}
+.nekto-ext__dropdown-btn:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+.nekto-ext__dropdown[data-open="true"] .nekto-ext__dropdown-btn {
+  border-color: color-mix(in srgb, var(--nekto-accent) 35%, var(--nekto-border));
+  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: 4px;
+}
+
+.nekto-ext__dropdown-value {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.nekto-ext__dropdown-chevron {
+  display: flex;
+  color: var(--nekto-muted);
+  transition: transform 0.2s ease;
+}
+.nekto-ext__dropdown[data-open="true"] .nekto-ext__dropdown-chevron {
+  transform: rotate(180deg);
+}
+
+.nekto-ext__dropdown-list {
+  display: none;
+  flex-direction: column;
+  gap: 2px;
+  margin-top: 4px;
+  padding: 4px;
+  max-height: 196px;
+  overflow-y: auto;
+  border-radius: 4px 4px 10px 10px;
+  border: 1px solid var(--nekto-border);
+  background: var(--nekto-control);
+}
+.nekto-ext__dropdown[data-open="true"] .nekto-ext__dropdown-list {
+  display: flex;
+  animation: nekto-dd-in 0.16s ease-out;
+}
+.nekto-ext__dropdown-list::-webkit-scrollbar {
+  width: 6px;
+}
+.nekto-ext__dropdown-list::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 99px;
+}
+
+@keyframes nekto-dd-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.nekto-ext__dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 8px 8px 8px 10px;
+  border: none;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--nekto-text);
+  font: inherit;
+  font-size: 12px;
+  text-align: left;
+  cursor: pointer;
+  outline: none;
+}
+.nekto-ext__dropdown-item:hover,
+.nekto-ext__dropdown-item:focus-visible {
+  background: var(--nekto-control-hover);
+}
+.nekto-ext__dropdown-item[aria-selected="true"] {
+  background: var(--nekto-accent-dim);
+}
+.nekto-ext__dropdown-item[data-muted="true"] {
+  color: var(--nekto-muted);
+  font-style: italic;
+}
+
+.nekto-ext__dropdown-label {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.nekto-ext__dropdown-check {
+  display: flex;
+  color: var(--nekto-accent);
+  opacity: 0;
+}
+.nekto-ext__dropdown-item[aria-selected="true"] .nekto-ext__dropdown-check {
+  opacity: 1;
+}
+
+/* Индикатор уровня микрофона */
+.nekto-ext__meter {
+  height: 6px;
+  margin: -4px 0 14px;
+  border-radius: 99px;
+  background: rgba(255, 255, 255, 0.06);
+  overflow: hidden;
+}
+.nekto-ext__meter span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--nekto-accent);
+  opacity: 0.75;
+  transform: scaleX(0);
+  transform-origin: left center;
+}
+
+#nekto-ext-device-access {
+  margin: -2px 0 12px;
+}
+
+.nekto-ext__divider {
+  height: 1px;
+  margin: 4px 0 14px;
+  background: var(--nekto-border);
+}
+
+.nekto-ext__range-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: -4px;
+  transition: opacity 0.15s ease;
+}
+.nekto-ext__range-row[data-disabled="true"] {
+  opacity: 0.4;
+}
+
+.nekto-ext__range {
+  flex: 1;
+  min-width: 0;
+  height: 4px;
+  appearance: none;
+  -webkit-appearance: none;
+  border-radius: 99px;
+  background: rgba(255, 255, 255, 0.1);
+  outline: none;
+  cursor: pointer;
+}
+.nekto-ext__range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--nekto-accent);
+  border: none;
+  box-shadow: 0 0 0 3px var(--nekto-accent-dim);
+}
+.nekto-ext__range:focus-visible::-webkit-slider-thumb {
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--nekto-accent) 40%, transparent);
+}
+
+.nekto-ext__range-value {
+  min-width: 38px;
+  text-align: right;
+  font-size: 11px;
+  color: var(--nekto-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.nekto-ext__status {
+  margin: 12px 0 0;
+  font-size: 11px;
+  line-height: 1.4;
+  color: var(--nekto-muted);
+}
+
+/* ───────── Декоративный фон страницы (content/backdrop.js) ───────── */
+
+#nekto-ext-backdrop {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1; /* под содержимым сайта, над фоном body */
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.8s ease;
+}
+#nekto-ext-backdrop[data-on="true"] {
+  opacity: 1;
+}
+
+/* ───────── Вкладка «Оформление»: тема + фон ───────── */
+
+.nekto-ext__subhead {
+  margin: 0 0 8px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--nekto-muted);
+}
+.nekto-ext__theme-list + .nekto-ext__subhead {
+  margin-top: 18px;
+}
+
+.nekto-ext__bg-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.nekto-ext__bg {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  padding: 9px 10px;
+  border-radius: 12px;
+  border: 1px solid var(--nekto-border);
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--nekto-text);
+  font: inherit;
+  font-size: 12px;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+.nekto-ext__bg:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+.nekto-ext__bg[data-active="true"] {
+  border-color: color-mix(in srgb, var(--nekto-accent) 55%, transparent);
+  background: var(--nekto-accent-dim);
+}
+.nekto-ext__bg:focus-visible {
+  outline: 2px solid var(--nekto-accent);
+  outline-offset: 2px;
+}
+
+.nekto-ext__bg-icon {
+  display: flex;
+  flex-shrink: 0;
+  color: var(--nekto-muted);
+}
+.nekto-ext__bg[data-active="true"] .nekto-ext__bg-icon {
+  color: var(--nekto-accent);
+}
+
+.nekto-ext__bg-name {
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+
+/* ───────── Вкладки «Тема» и «Фон» ───────── */
+
+.nekto-ext__divider--spaced {
+  margin: 16px 0;
+}
+
+.nekto-ext__row--last {
+  margin-bottom: 0;
+}
+
+.nekto-ext__slider {
+  margin-bottom: 14px;
+}
+
+.nekto-ext__slider-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.nekto-ext__slider .nekto-ext__range {
+  display: block;
+  width: 100%;
+}
+
+
+/* ───────── Пинг под таймером звонка ───────── */
+
+#nekto-ext-ping-badge {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  width: fit-content;
+  margin: 8px auto 0;
+  padding: 3px 11px 3px 9px;
+  border-radius: 99px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--nx-text-muted, #a7b0ba);
+  font-family: "Inter", "Segoe UI", system-ui, sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 18px;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  cursor: default;
+}
+
+.nekto-ext-ping__dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  background: #6fae7a;
+  box-shadow: 0 0 0 3px rgba(111, 174, 122, 0.15);
+  transition: background 0.3s ease, box-shadow 0.3s ease;
+}
+#nekto-ext-ping-badge[data-level="ok"] .nekto-ext-ping__dot {
+  background: #c9a25e;
+  box-shadow: 0 0 0 3px rgba(201, 162, 94, 0.15);
+}
+#nekto-ext-ping-badge[data-level="bad"] .nekto-ext-ping__dot {
+  background: #c46c6c;
+  box-shadow: 0 0 0 3px rgba(196, 108, 108, 0.15);
+}
+
+html.nx-anim #nekto-ext-ping-badge {
+  animation: nx-fade 0.3s ease both;
+}
+
+/* ───────── Плавная смена темы (класс ставится на ~0.65 с) ───────── */
+
+html.nx-theme-switching,
+html.nx-theme-switching *:not(#nekto-ext-backdrop),
+html.nx-theme-switching *::before,
+html.nx-theme-switching *::after {
+  transition:
+    background-color 0.5s ease,
+    color 0.5s ease,
+    border-color 0.5s ease,
+    fill 0.5s ease,
+    stroke 0.5s ease,
+    box-shadow 0.5s ease,
+    text-shadow 0.5s ease !important;
+}
+
+/* ───────── Компактная панель: тонкая полоска у края, раскрывается при наведении ───────── */
+
+.nekto-ext__dock {
+  position: relative;
+  transition:
+    box-shadow 0.2s ease,
+    transform 0.35s cubic-bezier(0.22, 0.8, 0.3, 1);
+}
+
+/* Полоска-ручка, видна только в свёрнутом виде */
+.nekto-ext__dock::before {
+  content: "";
+  position: absolute;
+  left: 2px;
+  top: 50%;
+  width: 3px;
+  height: 44px;
+  margin-top: -22px;
+  border-radius: 99px;
+  background: var(--nekto-accent);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+  z-index: 1;
+}
+
+/* Невидимая зона левее полоски — чтобы проще было навести курсор (только в компактном режиме) */
+.nekto-ext__dock::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: -12px;
+  width: 12px;
+  display: none;
+}
+#nekto-ext-root.nekto-ext--compact:not(.nekto-ext--open) .nekto-ext__dock::after {
+  display: block;
+}
+
+.nekto-ext__launcher > .nekto-ext__icon-btn {
+  transition:
+    background 0.15s ease,
+    color 0.15s ease,
+    box-shadow 0.15s ease,
+    opacity 0.2s ease;
+}
+
+/* Свёрнуто: панель уезжает за край, остаётся 8px. Сворачивается с задержкой, раскрывается сразу */
+#nekto-ext-root.nekto-ext--compact:not(.nekto-ext--open):not(:hover):not(:focus-within) .nekto-ext__dock {
+  transform: translateX(calc(100% - 8px));
+  box-shadow: none;
+  transition-delay: 0.4s;
+}
+#nekto-ext-root.nekto-ext--compact:not(.nekto-ext--open):not(:hover):not(:focus-within) .nekto-ext__dock::before {
+  opacity: 0.55;
+  transition-delay: 0.4s;
+}
+#nekto-ext-root.nekto-ext--compact:not(.nekto-ext--open):not(:hover):not(:focus-within) .nekto-ext__icon-btn {
+  opacity: 0;
+  transition-delay: 0.4s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nekto-ext__dock {
+    transition: box-shadow 0.2s ease;
+  }
+}
+
+/* ───────── Часы вверху страницы ───────── */
+
+#nekto-ext-clock-badge {
+  position: fixed;
+  top: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2147483640;
+  display: flex;
+  align-items: baseline;
+  padding: 5px 14px;
+  border-radius: 99px;
+  border: 1px solid var(--nx-border, rgba(255, 255, 255, 0.08));
+  background: color-mix(in srgb, var(--nx-surface-2, #1c2128) 85%, transparent);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+  color: var(--nx-text, #e2e3e7);
+  font-family: "Segoe UI Variable Display", "Segoe UI", "Inter", system-ui, sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  line-height: 20px;
+  font-variant-numeric: tabular-nums;
+  pointer-events: none;
+  user-select: none;
+}
+
+.nekto-ext-clock__sep {
+  margin: 0 1px;
+  color: var(--nx-text-muted, #a7b0ba);
+}
+
+/* Двоеточие мягко мигает, как у настоящих часов */
+html.nx-anim .nekto-ext-clock__sep {
+  animation: nx-clock-blink 2s ease-in-out infinite;
+}
+html.nx-anim #nekto-ext-clock-badge {
+  animation: nx-clock-in 0.35s ease both;
+}
+
+@keyframes nx-clock-blink {
+  0%, 45%, 100% { opacity: 1; }
+  60%, 85% { opacity: 0.25; }
+}
+@keyframes nx-clock-in {
+  from { opacity: 0; transform: translate(-50%, -6px); }
+  to { opacity: 1; transform: translateX(-50%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html.nx-anim .nekto-ext-clock__sep,
+  html.nx-anim #nekto-ext-clock-badge {
+    animation: none;
+  }
+}
+
+
+/* ───────── Своя картинка на фоне ───────── */
+
+/* Под эффектами фона (canvas, z-index −1); края с запасом, чтобы размытие не давало светлой рамки */
+#nekto-ext-bg-image {
+  position: fixed;
+  inset: -40px;
+  z-index: -2;
+  pointer-events: none;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  filter: blur(var(--nx-bgimg-blur, 6px)) brightness(var(--nx-bgimg-light, 0.45));
+}
+
+.nekto-ext__wall-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.nekto-ext__wall {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  min-width: 0;
+  aspect-ratio: 16 / 10;
+  margin: 0;
+  padding: 0;
+  border-radius: 10px;
+  border: 1px solid var(--nekto-border);
+  background-color: var(--nekto-control);
+  background-size: cover;
+  background-position: center;
+  color: var(--nekto-text);
+  font: inherit;
+  cursor: pointer;
+  overflow: hidden;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
+}
+.nekto-ext__wall:hover {
+  border-color: color-mix(in srgb, var(--nekto-accent) 45%, var(--nekto-border));
+}
+.nekto-ext__wall[data-active="true"] {
+  border-color: var(--nekto-accent);
+  box-shadow: 0 0 0 1px var(--nekto-accent);
+}
+.nekto-ext__wall:focus-visible {
+  outline: 2px solid var(--nekto-accent);
+  outline-offset: 2px;
+}
+
+/* Подпись поверх превью — на тёмной подложке, чтобы читалась на любой картинке */
+.nekto-ext__wall-name {
+  display: block;
+  width: 100%;
+  padding: 12px 6px 4px;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.72), rgba(0, 0, 0, 0));
+  color: #f2f2f2;
+  font-size: 10px;
+  font-weight: 600;
+  line-height: 1.2;
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* «Нет» и «+ Своя» — без картинки, подпись по центру */
+.nekto-ext__wall--none,
+.nekto-ext__wall--add {
+  align-items: center;
+  justify-content: center;
+}
+.nekto-ext__wall--none .nekto-ext__wall-name,
+.nekto-ext__wall--add .nekto-ext__wall-name {
+  padding: 0;
+  background: none;
+  color: var(--nekto-muted);
+  font-size: 11px;
+  text-align: center;
+}
+.nekto-ext__wall--add {
+  border-style: dashed;
+}
+
+/* Удалить свою картинку */
+.nekto-ext__wall-del {
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.6);
+  color: #f2f2f2;
+  font-size: 13px;
+  line-height: 1;
+  opacity: 0;
+  transition: opacity 0.15s ease, background 0.15s ease;
+}
+.nekto-ext__wall:hover .nekto-ext__wall-del,
+.nekto-ext__wall:focus-visible .nekto-ext__wall-del {
+  opacity: 1;
+}
+.nekto-ext__wall-del:hover {
+  background: rgba(196, 108, 108, 0.85);
+}
+
+#nekto-ext-bgimg-status {
+  margin-top: 8px;
+}
+
+.nekto-ext__bgimg-controls {
+  margin-top: 14px;
+  transition: opacity 0.15s ease;
+}
+.nekto-ext__bgimg-controls[data-disabled="true"] {
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+.nekto-ext__slider--last {
+  margin-bottom: 0;
+}
+
+/* ───────── Самопроверка: предупреждение, что сайт обновился ───────── */
+
+.nekto-ext__health {
+  margin-bottom: 14px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(201, 162, 94, 0.35);
+  background: rgba(201, 162, 94, 0.08);
+}
+.nekto-ext__health[hidden] {
+  display: none;
+}
+
+.nekto-ext__health-title {
+  margin-bottom: 6px;
+  color: #d8b578;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.nekto-ext__health-list {
+  margin: 0;
+  padding-left: 16px;
+  color: var(--nekto-muted);
+  font-size: 11px;
+  line-height: 1.4;
+}
+.nekto-ext__health-list li + li {
+  margin-top: 4px;
+}
+
+/* Точка на кнопке «Настройки», когда есть предупреждения */
+.nekto-ext__icon-btn {
+  position: relative;
+}
+.nekto-ext__icon-btn[data-warn="true"]::after {
+  content: "";
+  position: absolute;
+  top: 7px;
+  right: 7px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #c9a25e;
+  box-shadow: 0 0 0 2px var(--nekto-flyout);
+}
+
+/* ───────── Расширение перезагружено — эта копия скрипта остановлена ───────── */
+
+#nekto-ext-reload-notice {
+  position: fixed;
+  top: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2147483647;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 8px 8px 16px;
+  border-radius: 99px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(24, 26, 30, 0.95);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+  color: #e2e3e7;
+  font: 500 13px "Segoe UI", system-ui, sans-serif;
+  white-space: nowrap;
+}
+
+#nekto-ext-reload-notice button {
+  padding: 6px 14px;
+  border: none;
+  border-radius: 99px;
+  background: #3d4352;
+  color: #f2f2f2;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+#nekto-ext-reload-notice button:hover {
+  background: #4a5163;
 }

@@ -1,0 +1,788 @@
+/*
+ * Общая база всех тем Nekto Voice Panel.
+ * Цвета задаются переменными в файлах палитр (graphite.css, ocean.css, ...),
+ * здесь — только правила, покрывающие все экраны audiochat:
+ * параметры поиска, поиск, экран звонка, текстовый чат, попапы, мессенджер.
+ * Всё под html.nx-theme (класс ставит расширение), чтобы не зависеть от body.night_theme.
+ */
+
+html.nx-theme {
+  --nx-accent-soft: color-mix(in srgb, var(--nx-accent) 16%, transparent);
+  --nx-accent-softer: color-mix(in srgb, var(--nx-accent) 9%, transparent);
+  --nx-danger-soft: color-mix(in srgb, var(--nx-danger) 18%, transparent);
+  --nx-radius: 14px;
+  --nx-radius-sm: 10px;
+  color-scheme: dark;
+}
+
+/* ───────── Фон страницы и основная карточка ───────── */
+
+html.nx-theme body {
+  background: var(--nx-page) !important;
+  background-attachment: fixed !important;
+  color: var(--nx-text) !important;
+}
+
+html.nx-theme #app,
+html.nx-theme .chat_container,
+html.nx-theme .outer-container,
+html.nx-theme #audio-chat-container {
+  background: transparent !important;
+}
+
+html.nx-theme .chat_container .audio-chat,
+html.nx-theme .chat_container .audio-chat > div {
+  background: var(--nx-surface) !important;
+  color: var(--nx-text) !important;
+}
+
+html.nx-theme .chat_container .audio-chat {
+  border: 1px solid var(--nx-border) !important;
+  border-radius: var(--nx-radius) !important;
+  box-shadow: var(--nx-shadow) !important;
+  overflow: hidden !important;
+}
+
+html.nx-theme .audio-chat > div.header,
+html.nx-theme .audio-chat .header.header_chat,
+html.nx-theme .tabs_type_chats div:last-child {
+  background: var(--nx-surface-2) !important;
+  border-color: var(--nx-border) !important;
+  color: var(--nx-text-muted) !important;
+}
+
+html.nx-theme .audio-chat > div.header span,
+html.nx-theme .audio-chat .header.header_chat span {
+  color: var(--nx-text-muted) !important;
+}
+
+html.nx-theme a,
+html.nx-theme .audio-chat .description a,
+html.nx-theme .adv-block a {
+  color: var(--nx-accent) !important;
+}
+
+html.nx-theme ::selection {
+  background: var(--nx-accent-soft);
+}
+
+html.nx-theme ::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+html.nx-theme ::-webkit-scrollbar-track {
+  background: transparent;
+}
+html.nx-theme ::-webkit-scrollbar-thumb {
+  background: color-mix(in srgb, var(--nx-text) 18%, transparent);
+  border-radius: 99px;
+}
+html.nx-theme ::-webkit-scrollbar-thumb:hover {
+  background: color-mix(in srgb, var(--nx-text) 30%, transparent);
+}
+
+/* ───────── Ошибки / подключение / загрузка ───────── */
+
+html.nx-theme #audio-chat-container div.mask_error,
+html.nx-theme .mask_error {
+  background: var(--nx-surface) !important;
+  color: var(--nx-text) !important;
+}
+
+html.nx-theme .mask_opacity {
+  background-color: color-mix(in srgb, var(--nx-page-solid) 75%, transparent) !important;
+}
+
+html.nx-theme .audio-chat .loading,
+html.nx-theme .customLoader__text,
+html.nx-theme .audio-chat .content,
+html.nx-theme .audio-chat .title {
+  color: var(--nx-text) !important;
+}
+
+html.nx-theme .audio-chat .peer-problem-label,
+html.nx-theme .need-update-label {
+  color: var(--nx-danger) !important;
+}
+
+html.nx-theme .loader-overlay {
+  background: color-mix(in srgb, var(--nx-surface) 75%, transparent) !important;
+}
+html.nx-theme .spinner {
+  border-color: var(--nx-surface-3) !important;
+  border-top-color: var(--nx-accent) !important;
+}
+
+/* ───────── Экран параметров поиска (chat-step idle) ───────── */
+
+html.nx-theme .audio-chat .main-panel,
+html.nx-theme .audio-chat .chat-step {
+  background: transparent !important;
+  color: var(--nx-text) !important;
+}
+
+html.nx-theme .audio-chat .filter-label,
+html.nx-theme .audio-chat .description {
+  color: var(--nx-text) !important;
+}
+
+html.nx-theme .audio-chat .user-age-hint,
+html.nx-theme .audio-chat .peer-age-hint,
+html.nx-theme .audio-chat .talk-label,
+html.nx-theme .audio-chat .timer-label,
+html.nx-theme .audio-chat .users-count-panel {
+  color: var(--nx-text-muted) !important;
+}
+
+html.nx-theme .audio-chat .asterisk {
+  color: var(--nx-danger) !important;
+}
+
+html.nx-theme .audio-chat .talking {
+  display: inline-block !important;
+  padding: 4px 14px !important;
+  border-radius: 99px !important;
+  background: var(--nx-pill) !important;
+  color: var(--nx-on-accent) !important;
+  font-weight: 600 !important;
+}
+html.nx-theme .audio-chat .talking .talking-count {
+  color: inherit !important;
+  background: none !important;
+}
+
+html.nx-theme .audio-chat .btn-default,
+html.nx-theme .audio-chat .btn-default.disabled:not(.checked) {
+  background: var(--nx-surface-3) !important;
+  border: 1px solid var(--nx-border) !important;
+  color: var(--nx-text) !important;
+  box-shadow: none !important;
+  outline: none !important;
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease !important;
+}
+
+html.nx-theme .audio-chat .btn-default:hover:not(.checked):not(.disabled) {
+  background: color-mix(in srgb, var(--nx-surface-3) 80%, var(--nx-accent)) !important;
+}
+
+/* Выбранная кнопка выделяется заливкой, без светлой обводки */
+html.nx-theme .audio-chat .btn-default.checked {
+  background: color-mix(in srgb, var(--nx-surface-3) 72%, var(--nx-accent)) !important;
+  border-color: var(--nx-border) !important;
+  color: var(--nx-text) !important;
+  font-weight: 600 !important;
+}
+
+html.nx-theme .audio-chat .btn-default.disabled:not(.checked) {
+  opacity: 0.45 !important;
+}
+
+html.nx-theme .audio-chat .btn:focus,
+html.nx-theme .audio-chat .btn:active {
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+/* Большие кнопки «Начать поиск» старого шага idle */
+html.nx-theme .audio-chat .scan-button,
+html.nx-theme .audio-chat .go-scan-button,
+html.nx-theme .btn-my2 {
+  background-color: var(--nx-accent-strong) !important;
+  border: 2px solid transparent !important;
+  color: var(--nx-on-accent) !important;
+}
+html.nx-theme .audio-chat .scan-button:hover,
+html.nx-theme .audio-chat .go-scan-button:hover,
+html.nx-theme .btn-my2:hover {
+  background-color: var(--nx-accent-hover) !important;
+}
+
+html.nx-theme .audio-chat .go-idle-button,
+html.nx-theme .audio-chat .stop-scan-button,
+html.nx-theme .audio-chat .stop-talk-button {
+  background-color: transparent !important;
+  border: 2px solid var(--nx-accent) !important;
+  color: var(--nx-accent) !important;
+}
+html.nx-theme .audio-chat .go-idle-button:hover,
+html.nx-theme .audio-chat .stop-scan-button:hover,
+html.nx-theme .audio-chat .stop-talk-button:hover {
+  background-color: var(--nx-accent-softer) !important;
+  opacity: 1 !important;
+}
+
+html.nx-theme .audio-chat .mute-button {
+  border-color: var(--nx-border) !important;
+}
+html.nx-theme .audio-chat .mute-button.muted {
+  background-color: var(--nx-accent-soft) !important;
+}
+
+/* Кнопка-ссылка на мессенджер рядом с параметрами */
+html.nx-theme .toMessengerBtn,
+html.nx-theme .toMessengerBtn svg {
+  color: var(--nx-accent) !important;
+  fill: var(--nx-accent) !important;
+}
+html.nx-theme .toMessengerBtn div:hover {
+  background: var(--nx-accent-softer) !important;
+}
+html.nx-theme .toMessengerBtn .badgeCounter,
+html.nx-theme .callScreen__messageBtnCount,
+html.nx-theme .messenger_badge_new {
+  background: var(--nx-danger) !important;
+  color: #fff !important;
+}
+
+/* ───────── Громкость (vue-slider) ───────── */
+
+html.nx-theme .volume_slider .vue-slider-rail {
+  background-color: var(--nx-surface-3) !important;
+}
+html.nx-theme .volume_slider .vue-slider-process {
+  background-color: var(--nx-accent) !important;
+}
+/* Точка — чистый круг цвета темы, без колец (ручка внутри сброшена в site-tweaks.css) */
+html.nx-theme .volume_slider .vue-slider-dot {
+  background-color: var(--nx-accent) !important;
+}
+html.nx-theme .vue-slider-dot-tooltip-inner,
+html.nx-theme .vue-slider-dot-tooltip-text {
+  background: var(--nx-surface-2) !important;
+  border-color: var(--nx-surface-2) !important;
+  color: var(--nx-text) !important;
+}
+
+/* ───────── Экран поиска (chat-step scan) ───────── */
+
+html.nx-theme .search_loader .search_loader_inner {
+  background: conic-gradient(
+    color-mix(in srgb, var(--nx-accent) 0%, transparent) 0,
+    color-mix(in srgb, var(--nx-accent) 40%, transparent) 40%,
+    color-mix(in srgb, var(--nx-accent) 80%, transparent) 80%,
+    var(--nx-accent) 100%
+  ) !important;
+}
+html.nx-theme .search_loader .search_loader_circle {
+  background-color: var(--nx-accent-strong) !important;
+}
+html.nx-theme .search_loader_circle.callScreen__roundSvg .call-big-round__question {
+  fill: var(--nx-on-accent) !important;
+}
+
+html.nx-theme .search_text,
+html.nx-theme .long_search_text {
+  color: var(--nx-text) !important;
+}
+
+html.nx-theme .btnNekto {
+  border-color: var(--nx-accent) !important;
+  background: transparent !important;
+  color: var(--nx-accent) !important;
+  fill: var(--nx-accent) !important;
+}
+html.nx-theme .btnNekto .icon path {
+  fill: currentColor !important;
+}
+html.nx-theme .btnNekto:hover {
+  background: var(--nx-accent-softer) !important;
+}
+html.nx-theme .btnNekto.filled {
+  background: var(--nx-accent-strong) !important;
+  border-color: var(--nx-accent-strong) !important;
+  color: var(--nx-on-accent) !important;
+  fill: var(--nx-on-accent) !important;
+}
+html.nx-theme .btnNekto.filled:hover {
+  background: var(--nx-accent-hover) !important;
+}
+
+html.nx-theme .btnNektoLink,
+html.nx-theme .btnNektoLink path {
+  color: var(--nx-text-muted) !important;
+  fill: var(--nx-text-muted) !important;
+}
+html.nx-theme .btnNektoLink:hover,
+html.nx-theme .btnNektoLink:hover path {
+  color: var(--nx-text) !important;
+  fill: var(--nx-text) !important;
+}
+
+/* ───────── Экран звонка (callScreen) ───────── */
+
+html.nx-theme .callScreen,
+html.nx-theme .callScreen__buttons {
+  background: var(--nx-surface) !important;
+}
+
+html.nx-theme .callScreen__name,
+html.nx-theme .callScreen__finishText {
+  color: var(--nx-text) !important;
+}
+html.nx-theme .callScreen__time {
+  color: var(--nx-text-muted) !important;
+}
+html.nx-theme .callScreen__topErrors {
+  color: var(--nx-danger) !important;
+}
+html.nx-theme .callScreen__finishText .icon {
+  fill: var(--nx-danger) !important;
+}
+
+/* Круглая иконка собеседника */
+html.nx-theme .callScreen__roundSvg .call-big-round__border {
+  fill: var(--nx-accent-soft) !important;
+}
+html.nx-theme .callScreen__roundSvg .call-big-round__circle {
+  fill: var(--nx-accent-strong) !important;
+}
+html.nx-theme .callScreen__roundSvg .call-big-round__question {
+  fill: var(--nx-surface) !important;
+}
+html.nx-theme .callScreen.callFinished .callScreen__roundSvg .call-big-round__border {
+  fill: var(--nx-danger-soft) !important;
+}
+html.nx-theme .callScreen.callFinished .callScreen__roundSvg .call-big-round__circle {
+  fill: var(--nx-danger) !important;
+}
+html.nx-theme .callScreen.callFinished .callScreen__roundSvg .call-big-round__question {
+  fill: var(--nx-surface) !important;
+}
+
+/* Кнопки экрана звонка: обычная (контур), filled, green, danger, disabled */
+html.nx-theme .callScreen .btn {
+  border-color: var(--nx-accent) !important;
+  background: transparent !important;
+  color: var(--nx-accent) !important;
+  fill: var(--nx-accent) !important;
+  transition: background 0.15s ease, opacity 0.15s ease !important;
+}
+html.nx-theme .callScreen .btn:hover {
+  background: var(--nx-accent-softer) !important;
+}
+html.nx-theme .callScreen .btn.filled,
+html.nx-theme .callScreen .btn.green.filled {
+  background: var(--nx-accent-strong) !important;
+  border-color: var(--nx-accent-strong) !important;
+  color: var(--nx-on-accent) !important;
+  fill: var(--nx-on-accent) !important;
+}
+html.nx-theme .callScreen .btn.filled:hover,
+html.nx-theme .callScreen .btn.green.filled:hover {
+  background: var(--nx-accent-hover) !important;
+}
+html.nx-theme .callScreen .btn.green:not(.filled) {
+  border-color: var(--nx-accent-strong) !important;
+  color: var(--nx-accent) !important;
+  fill: var(--nx-accent) !important;
+}
+
+html.nx-theme .callScreen .btn.danger,
+html.nx-theme .callScreen .btn.danger2 {
+  border-color: var(--nx-danger) !important;
+  color: var(--nx-danger) !important;
+  fill: var(--nx-danger) !important;
+}
+html.nx-theme .callScreen .btn.danger {
+  background: transparent !important;
+}
+html.nx-theme .callScreen .btn.danger2 {
+  background: var(--nx-danger-soft) !important;
+}
+html.nx-theme .callScreen .btn.danger:hover,
+html.nx-theme .callScreen .btn.danger2:hover {
+  background: color-mix(in srgb, var(--nx-danger) 28%, transparent) !important;
+}
+html.nx-theme .callScreen .btn.filled.danger,
+html.nx-theme .callScreen .btn.filled.danger2 {
+  background: var(--nx-danger) !important;
+  color: #fff !important;
+  fill: #fff !important;
+}
+html.nx-theme .callScreen__complaintBtn,
+html.nx-theme .callScreen__complaintBtn svg {
+  color: var(--nx-danger) !important;
+  fill: var(--nx-danger) !important;
+}
+
+html.nx-theme .callScreen .btn.disabled,
+html.nx-theme .callScreen .btn.filled.disabled {
+  border-color: var(--nx-border-strong) !important;
+  background: transparent !important;
+  color: var(--nx-text-muted) !important;
+  fill: var(--nx-text-muted) !important;
+  opacity: 0.6 !important;
+}
+
+/* Плашки «Жалоба отправлена», «Микрофон выключен» */
+html.nx-theme .callScreen__complaintSentMessage,
+html.nx-theme .mute-toast,
+html.nx-theme .responsiveMessenger__notification {
+  background: var(--nx-surface-2) !important;
+  color: var(--nx-text) !important;
+  border: 1px solid var(--nx-border) !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4) !important;
+}
+html.nx-theme .callScreen__complaintSentMessage .icon {
+  fill: var(--nx-danger) !important;
+}
+
+/* ───────── Текстовый чат во время звонка (responsiveMessenger) ───────── */
+
+html.nx-theme .responsiveMessenger__inner {
+  background: var(--nx-surface-2) !important;
+  border: 1px solid var(--nx-border) !important;
+}
+html.nx-theme .responsiveMessenger__inner::before {
+  opacity: 0.06 !important;
+}
+html.nx-theme .responsiveMessenger__header,
+html.nx-theme .responsiveMessenger__header svg {
+  color: var(--nx-text-muted) !important;
+  fill: var(--nx-text-muted) !important;
+}
+html.nx-theme .responsiveMessenger__emptyText {
+  color: var(--nx-text-muted) !important;
+}
+html.nx-theme .responsiveMessenger .messenger-timer {
+  color: var(--nx-danger) !important;
+}
+html.nx-theme .responsiveMessenger .hr-line {
+  background: var(--nx-border) !important;
+}
+
+html.nx-theme .responsiveMessenger .responsiveMessenger__closeBtn {
+  background: var(--nx-surface-3) !important;
+  border: 1px solid var(--nx-border) !important;
+}
+html.nx-theme .responsiveMessenger__closeBtn .icon {
+  fill: var(--nx-text) !important;
+}
+
+html.nx-theme .responsiveMessenger__pseudoAvatar {
+  border-color: var(--nx-accent) !important;
+}
+html.nx-theme .responsiveMessenger__pseudoAvatar::before {
+  background: var(--nx-accent-strong) !important;
+}
+
+/* Входящие */
+html.nx-theme .responsiveMessenger__message {
+  background: var(--nx-msg-in) !important;
+  color: var(--nx-msg-in-text) !important;
+}
+html.nx-theme .responsiveMessenger__message:last-child::after {
+  background-image: radial-gradient(circle at 0 0, rgba(0, 0, 0, 0) 5px, var(--nx-msg-in) 6px) !important;
+}
+/* Исходящие */
+html.nx-theme .responsiveMessenger__messagesGroup.mym .responsiveMessenger__message {
+  background: var(--nx-msg-out) !important;
+  color: var(--nx-msg-out-text) !important;
+}
+html.nx-theme .responsiveMessenger__messagesGroup.mym .responsiveMessenger__message:last-child::after {
+  background-image: radial-gradient(circle at 100% 0, rgba(0, 0, 0, 0) 5px, var(--nx-msg-out) 6px) !important;
+}
+html.nx-theme .responsiveMessenger__messageStatus_delivered,
+html.nx-theme .responsiveMessenger__messagesGroup.mym .responsiveMessenger__messageStatus_delivered {
+  background: var(--nx-accent) !important;
+}
+
+/* Поле ввода */
+html.nx-theme .responsiveMessenger__formInput input,
+html.nx-theme .responsiveMessenger__formInput textarea {
+  background: var(--nx-surface-3) !important;
+  color: var(--nx-text) !important;
+}
+html.nx-theme .responsiveMessenger__formInput input::placeholder,
+html.nx-theme .responsiveMessenger__formInput textarea::placeholder {
+  color: var(--nx-text-muted) !important;
+}
+html.nx-theme .responsiveMessenger__formInput::after {
+  background-image: radial-gradient(circle at 100% 0, rgba(0, 0, 0, 0) 5px, var(--nx-surface-3) 6px) !important;
+}
+html.nx-theme .responsiveMessenger__submitBtn {
+  background: var(--nx-accent-strong) !important;
+  border-color: var(--nx-accent-soft) !important;
+}
+
+/* ───────── Мессенджер (список диалогов) ───────── */
+
+html.nx-theme .messenger_dialog,
+html.nx-theme .staff_btn {
+  background: var(--nx-surface-2) !important;
+  color: var(--nx-text) !important;
+  border: 1px solid var(--nx-border) !important;
+}
+html.nx-theme .messenger_dialog .dialog-status {
+  color: var(--nx-accent) !important;
+}
+html.nx-theme .messenger_dialog .dialog-last-message {
+  color: var(--nx-text-muted) !important;
+}
+html.nx-theme .messenger_menu_context {
+  background: var(--nx-surface-3) !important;
+  border-color: var(--nx-border) !important;
+  color: var(--nx-text) !important;
+}
+html.nx-theme .nav-tabs,
+html.nx-theme .nav-tabs.messenger_dialogs_nav {
+  border-color: var(--nx-border) !important;
+}
+html.nx-theme .nav-tabs.messenger_dialogs_nav > li > a {
+  background: transparent !important;
+  border-color: transparent !important;
+  color: var(--nx-text-muted) !important;
+}
+html.nx-theme .nav-tabs.messenger_dialogs_nav > li.active > a,
+html.nx-theme .nav-tabs.messenger_dialogs_nav > li.active > a:hover,
+html.nx-theme .nav-tabs.messenger_dialogs_nav > li.active > a:focus {
+  color: var(--nx-text) !important;
+  border-bottom: 3px solid var(--nx-accent) !important;
+}
+html.nx-theme .messenger_options {
+  color: var(--nx-text-muted) !important;
+}
+
+/* ───────── Попапы SweetAlert2 (подтверждение, жалоба, правила, бан, разрешения) ───────── */
+
+html.nx-theme .swal2-container.swal2-backdrop-show,
+html.nx-theme .swal2-container.swal2-shown {
+  background-color: color-mix(in srgb, var(--nx-page-solid) 70%, transparent) !important;
+  backdrop-filter: blur(4px);
+}
+
+html.nx-theme .swal2-popup,
+html.nx-theme .swal2-modal,
+html.nx-theme .iosInstallHelpPopup.swal2-modal {
+  background: var(--nx-surface-2) !important;
+  color: var(--nx-text) !important;
+  border: 1px solid var(--nx-border) !important;
+  border-radius: var(--nx-radius) !important;
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.55) !important;
+}
+
+html.nx-theme .swal2-popup .swal2-title,
+html.nx-theme .swal2-popup .swal2-content,
+html.nx-theme .swal2-popup .swal2-content div,
+html.nx-theme .swal2-popup .swal2-content ul li,
+html.nx-theme .swal2-popup .swal2-html-container,
+html.nx-theme .swal2-popup .swal2-label,
+html.nx-theme .ios-install-guide__steps li,
+html.nx-theme .ios-install-guide__title {
+  color: var(--nx-text) !important;
+}
+html.nx-theme .ios-install-guide__hint,
+html.nx-theme .ios-install-guide__subtitle,
+html.nx-theme .swal2-popup .swal2-footer {
+  color: var(--nx-text-muted) !important;
+  border-color: var(--nx-border) !important;
+}
+html.nx-theme .permission-popup .swal2-content .title {
+  color: var(--nx-danger) !important;
+}
+
+html.nx-theme .swal2-popup .swal2-close {
+  color: var(--nx-text-muted) !important;
+}
+html.nx-theme .swal2-popup .swal2-close:hover {
+  color: var(--nx-text) !important;
+}
+
+html.nx-theme .swal2-icon.swal2-question,
+html.nx-theme .swal2-icon.swal2-info {
+  border-color: var(--nx-accent) !important;
+  color: var(--nx-accent) !important;
+}
+html.nx-theme .swal2-icon.swal2-warning {
+  border-color: #c9a25e !important;
+  color: #c9a25e !important;
+}
+html.nx-theme .swal2-icon.swal2-error {
+  border-color: var(--nx-danger) !important;
+}
+html.nx-theme .swal2-icon.swal2-error [class^="swal2-x-mark-line"] {
+  background-color: var(--nx-danger) !important;
+}
+html.nx-theme .swal2-icon.swal2-success [class^="swal2-success-line"] {
+  background-color: var(--nx-accent) !important;
+}
+html.nx-theme .swal2-icon.swal2-success .swal2-success-ring {
+  border-color: var(--nx-accent-soft) !important;
+}
+html.nx-theme .swal2-icon.swal2-success [class^="swal2-success-circular-line"],
+html.nx-theme .swal2-icon.swal2-success .swal2-success-fix {
+  background-color: var(--nx-surface-2) !important;
+}
+
+/* Кнопки: у сайта цвет задан инлайном (confirmButtonColor), поэтому !important обязателен */
+html.nx-theme .swal2-popup .swal2-styled {
+  border-radius: 99px !important;
+  font-weight: 700 !important;
+  box-shadow: none !important;
+  transition: background 0.15s ease, opacity 0.15s ease !important;
+}
+html.nx-theme .swal2-popup .swal2-styled:focus {
+  box-shadow: 0 0 0 3px var(--nx-accent-soft) !important;
+}
+
+html.nx-theme .swal2-popup .swal2-actions:not(.swal2-loading) .swal2-styled.swal2-confirm,
+html.nx-theme .banPopup.swal2-popup .swal2-actions:not(.swal2-loading) .swal2-styled.swal2-confirm {
+  background: var(--nx-accent-strong) !important;
+  border: 2px solid var(--nx-accent-strong) !important;
+  color: var(--nx-on-accent) !important;
+}
+html.nx-theme .swal2-popup .swal2-actions:not(.swal2-loading) .swal2-styled.swal2-confirm:hover {
+  background: var(--nx-accent-hover) !important;
+  opacity: 1 !important;
+}
+
+html.nx-theme .swal2-popup .swal2-actions .swal2-styled.swal2-cancel {
+  background: transparent !important;
+  border: 2px solid var(--nx-border-strong) !important;
+  color: var(--nx-text) !important;
+}
+html.nx-theme .swal2-popup .swal2-actions .swal2-styled.swal2-cancel:hover {
+  background: var(--nx-surface-3) !important;
+  opacity: 1 !important;
+}
+
+/* Деструктивные подтверждения: «Завершить разговор», «Пожаловаться», «Удалить диалог» */
+html.nx-theme .closeDialogPopup .swal2-actions:not(.swal2-loading) .swal2-styled.swal2-confirm,
+html.nx-theme .reportConfirm .swal2-actions:not(.swal2-loading) .swal2-styled.swal2-confirm,
+html.nx-theme .reportSpamPopup .swal2-actions:not(.swal2-loading) .swal2-styled.swal2-confirm {
+  background: var(--nx-danger-soft) !important;
+  border: 2px solid var(--nx-danger) !important;
+  color: var(--nx-danger) !important;
+}
+html.nx-theme .closeDialogPopup .swal2-actions:not(.swal2-loading) .swal2-styled.swal2-confirm:hover,
+html.nx-theme .reportConfirm .swal2-actions:not(.swal2-loading) .swal2-styled.swal2-confirm:hover,
+html.nx-theme .reportSpamPopup .swal2-actions:not(.swal2-loading) .swal2-styled.swal2-confirm:hover {
+  background: color-mix(in srgb, var(--nx-danger) 30%, transparent) !important;
+}
+html.nx-theme .closeDialogPopup .swal2-actions .swal2-styled.swal2-cancel,
+html.nx-theme .reportConfirm .swal2-actions .swal2-styled.swal2-cancel {
+  background: var(--nx-accent-strong) !important;
+  border-color: var(--nx-accent-strong) !important;
+  color: var(--nx-on-accent) !important;
+}
+html.nx-theme .closeDialogPopup .swal2-actions .swal2-styled.swal2-cancel:hover,
+html.nx-theme .reportConfirm .swal2-actions .swal2-styled.swal2-cancel:hover {
+  background: var(--nx-accent-hover) !important;
+}
+
+html.nx-theme .swal2-popup .swal2-actions.swal2-loading .swal2-styled.swal2-confirm {
+  border-left-color: var(--nx-accent) !important;
+  border-right-color: var(--nx-accent) !important;
+  background: transparent !important;
+}
+
+/* Поля ввода в попапах (текст жалобы, возраст и т.п.) */
+html.nx-theme .swal2-popup .swal2-input,
+html.nx-theme .swal2-popup .swal2-textarea,
+html.nx-theme .swal2-popup .swal2-select,
+html.nx-theme .swal2-popup .swal2-file {
+  background: var(--nx-surface-3) !important;
+  border: 1px solid var(--nx-border) !important;
+  color: var(--nx-text) !important;
+  box-shadow: none !important;
+}
+html.nx-theme .swal2-popup .swal2-input:focus,
+html.nx-theme .swal2-popup .swal2-textarea:focus {
+  border-color: var(--nx-accent) !important;
+  box-shadow: 0 0 0 3px var(--nx-accent-soft) !important;
+}
+html.nx-theme .swal2-popup .swal2-radio,
+html.nx-theme .swal2-popup .swal2-checkbox {
+  background: transparent !important;
+  color: var(--nx-text) !important;
+}
+html.nx-theme .swal2-radio label {
+  border-color: var(--nx-border) !important;
+  color: var(--nx-text) !important;
+}
+html.nx-theme .swal2-validation-message {
+  background: var(--nx-surface-3) !important;
+  color: var(--nx-text) !important;
+}
+html.nx-theme .swal2-validation-message::before {
+  background-color: var(--nx-danger) !important;
+}
+
+html.nx-theme .abuse-report-popup .abuse-type-button {
+  background: var(--nx-surface-3) !important;
+  border: 1px solid var(--nx-border) !important;
+  color: var(--nx-text) !important;
+}
+html.nx-theme .abuse-report-popup .abuse-type-button:hover,
+html.nx-theme .abuse-report-popup .abuse-type-button.active {
+  border-color: var(--nx-accent) !important;
+  background: var(--nx-accent-soft) !important;
+}
+
+html.nx-theme .ios-install-guide__control,
+html.nx-theme .ios-install-guide__menu-item {
+  background: var(--nx-surface-3) !important;
+  border-color: var(--nx-border) !important;
+  color: var(--nx-text) !important;
+}
+
+/* Старые внутриэкранные попапы (popup-panel) — на сайте ещё встречаются */
+html.nx-theme .popup-panel {
+  background: var(--nx-surface-2) !important;
+  border: 1px solid var(--nx-border) !important;
+}
+html.nx-theme .popup-content .title,
+html.nx-theme .popup-content .content,
+html.nx-theme .popup-content .question {
+  color: var(--nx-text) !important;
+  border-color: var(--nx-border) !important;
+}
+html.nx-theme .popup-content .btn.cancel {
+  background: transparent !important;
+  border: 2px solid var(--nx-border-strong) !important;
+  color: var(--nx-text) !important;
+}
+html.nx-theme .popup-content .btn.finish {
+  background: var(--nx-accent-strong) !important;
+  border: 2px solid var(--nx-accent-strong) !important;
+  color: var(--nx-on-accent) !important;
+}
+
+/* Bootstrap-модалки */
+html.nx-theme .modal-content {
+  background: var(--nx-surface-2) !important;
+  color: var(--nx-text) !important;
+  border: 1px solid var(--nx-border) !important;
+}
+html.nx-theme .modal-header,
+html.nx-theme .modal-footer {
+  border-color: var(--nx-border) !important;
+}
+
+/* Баннер согласия на cookies */
+html.nx-theme .cookies-consent {
+  background: var(--nx-surface-2) !important;
+  border-top: 1px solid var(--nx-border) !important;
+  box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.4) !important;
+}
+html.nx-theme .cookies-consent__text {
+  color: var(--nx-text) !important;
+}
+html.nx-theme .cookies-consent__button {
+  background: var(--nx-accent-strong) !important;
+  color: var(--nx-on-accent) !important;
+  border-radius: 99px !important;
+}
+
+/* ───────── Панель расширения подхватывает акцент темы ───────── */
+
+html.nx-theme #nekto-ext-root {
+  --nekto-flyout: color-mix(in srgb, var(--nx-surface-2) 97%, transparent);
+  --nekto-border: var(--nx-border-strong);
+  --nekto-text: var(--nx-text);
+  --nekto-muted: var(--nx-text-muted);
+  --nekto-control: var(--nx-surface);
+  --nekto-control-hover: var(--nx-surface-3);
+  --nekto-accent: var(--nx-accent);
+  --nekto-accent-dim: var(--nx-accent-soft);
+}

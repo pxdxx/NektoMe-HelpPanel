@@ -1,10 +1,21 @@
 {
   "manifest_version": 3,
   "name": "Nekto Voice Panel",
-  "version": "1.0.0",
-  "description": "Панель для голосовой чат-рулетки nekto.me: авто-скип, темы, статистика.",
-  "permissions": ["storage"],
-  "host_permissions": ["https://nekto.me/*", "https://www.nekto.me/*"],
+  "version": "1.17.0",
+  "description": "Панель для голосовой чат-рулетки nekto.me: авто-скип, темы, выбор микрофона и наушников, самопрослушка, статистика.",
+  "icons": {
+    "16": "icons/icon-16.png",
+    "32": "icons/icon-32.png",
+    "48": "icons/icon-48.png",
+    "128": "icons/icon-128.png"
+  },
+  "permissions": [
+    "storage"
+  ],
+  "host_permissions": [
+    "https://nekto.me/*",
+    "https://www.nekto.me/*"
+  ],
   "background": {
     "service_worker": "background.js"
   },
@@ -16,15 +27,42 @@
         "https://www.nekto.me/audiochat*",
         "https://www.nekto.me/*/audiochat*"
       ],
-      "js": ["content/main.js"],
-      "css": ["content/panel.css"],
+      "js": [
+        "content/page-hook.js"
+      ],
+      "run_at": "document_start",
+      "world": "MAIN",
+      "all_frames": false
+    },
+    {
+      "matches": [
+        "https://nekto.me/audiochat*",
+        "https://nekto.me/*/audiochat*",
+        "https://www.nekto.me/audiochat*",
+        "https://www.nekto.me/*/audiochat*"
+      ],
+      "js": [
+        "content/backdrop.js",
+        "content/main.js"
+      ],
+      "css": [
+        "content/panel.css"
+      ],
       "run_at": "document_idle"
     }
   ],
   "web_accessible_resources": [
     {
-      "resources": ["themes/*.css"],
-      "matches": ["https://nekto.me/*", "https://www.nekto.me/*"]
+      "resources": [
+        "themes/*.css",
+        "sounds/*",
+        "wallpaper/*"
+      ],
+      "matches": [
+        "https://nekto.me/*",
+        "https://www.nekto.me/*"
+      ]
     }
-  ]
+  ],
+  "minimum_chrome_version": "111"
 }

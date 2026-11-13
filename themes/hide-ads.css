@@ -1,36 +1,43 @@
-/* Скрытие рекламы и боковых промо-блоков — логика как в pulse-talk.css */
-body.night_theme .navbar.navbar-inverse.navbar-fixed-top,
-body.night_theme .hidden-xs,
-body.night_theme .hidden-sm,
-body.night_theme .col-sm-1,
-body.night_theme .col-md-4,
-body.night_theme .col-lg-3,
-body.night_theme .audio-chat .description,
-body.night_theme .audio-chat .join,
-body.night_theme .audio-chat div > a[href*="play.google.com"],
-body.night_theme .audio-chat div > a[href*="nekto.me/ios-chat-ruletka"],
-body.night_theme .audio-chat h1.chat,
-body.night_theme .audio-chat .companion-label,
-body.night_theme .audio-chat span.chat {
+/* Скрытие рекламы, промо приложений и лишних блоков. Включается классом html.nx-hide-ads */
+
+/* Верхнее меню сайта и боковые колонки (в них рекламные слоты) */
+html.nx-hide-ads .navbar.navbar-inverse.navbar-fixed-top,
+html.nx-hide-ads .chat_container > .hidden-xs,
+html.nx-hide-ads .chat_container > .hidden-sm,
+html.nx-hide-ads .tabs_type_chats,
+html.nx-hide-ads .micro_tab_icon {
   display: none !important;
 }
 
-body.night_theme .audio-chat div > h1.chat,
-body.night_theme .audio-chat div[style*=""] > h1.chat,
-body.night_theme .audio-chat div[style=""] > h1.chat {
+/* Описание сервиса и ссылки на мобильные приложения */
+html.nx-hide-ads .audio-chat .description,
+html.nx-hide-ads .audio-chat .join,
+html.nx-hide-ads .audio-chat a[href*="play.google.com"],
+html.nx-hide-ads .audio-chat a[href*="ios-chat-ruletka"],
+html.nx-hide-ads .audio-chat .gplaybotbut,
+html.nx-hide-ads #app_android,
+html.nx-hide-ads #app_ios {
   display: none !important;
 }
 
-body.night_theme .adv-block,
-body.night_theme .adsbygoogle,
-body.night_theme iframe[src*="googlesyndication"],
-body.night_theme iframe[src*="doubleclick"],
-body.night_theme iframe[src*="googletagservices"],
-body.night_theme iframe[src*="yandex.ru/ads"],
-body.night_theme [class*="advBox" i],
-body.night_theme [id*="google_ads"],
-body.night_theme [data-ad-client],
-body.night_theme [data-ad-slot] {
+/* Рекламные блоки */
+html.nx-hide-ads .adv-block,
+html.nx-hide-ads .advBox,
+html.nx-hide-ads .advMobileBlock,
+html.nx-hide-ads .horizontal_adv_container,
+html.nx-hide-ads .fs_wrapper_outer,
+html.nx-hide-ads .no-adb,
+html.nx-hide-ads .adsbygoogle,
+html.nx-hide-ads [id^="yandex_rtb"],
+html.nx-hide-ads [id^="adfox_"],
+html.nx-hide-ads iframe[src*="googlesyndication"],
+html.nx-hide-ads iframe[src*="doubleclick"],
+html.nx-hide-ads iframe[src*="googletagservices"],
+html.nx-hide-ads iframe[src*="yandex.ru/ads"],
+html.nx-hide-ads iframe[src*="an.yandex.ru"],
+html.nx-hide-ads [id*="google_ads"],
+html.nx-hide-ads [data-ad-client],
+html.nx-hide-ads [data-ad-slot] {
   display: none !important;
   visibility: hidden !important;
   height: 0 !important;
@@ -40,4 +47,12 @@ body.night_theme [data-ad-slot] {
   margin: 0 !important;
   padding: 0 !important;
   border: none !important;
+}
+
+/* Без верхнего меню отступ под него не нужен */
+html.nx-hide-ads .audio-chat {
+  padding-top: 0 !important;
+}
+html.nx-hide-ads .chat_container .outer-container {
+  padding: 16px 0 !important;
 }

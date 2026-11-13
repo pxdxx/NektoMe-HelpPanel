@@ -1,14 +1,15 @@
-/* Правки вёрстки nekto под расширение — грузится после тем, чтобы не перебивалось */
+/* Правки вёрстки nekto под расширение — грузится последним, чтобы не перебивалось */
 html {
   overflow-x: hidden !important;
   max-width: 100%;
 }
 
-body.night_theme {
+body {
   overflow-x: hidden !important;
 }
 
-body.night_theme .audio-chat .theme-filter-panel {
+/* Кнопка «Светлая» скрыта расширением — центрируем оставшуюся «Тёмную» */
+.audio-chat .theme-filter-panel {
   display: flex !important;
   flex-direction: column !important;
   align-items: center !important;
@@ -16,17 +17,184 @@ body.night_theme .audio-chat .theme-filter-panel {
   width: 100% !important;
 }
 
-body.night_theme .audio-chat .theme-filter-panel .filter-label {
+/* Первая колонка — подпись «Цветовая схема:» (+ скрытая «Светлая»), вторая — «Тёмная» */
+.audio-chat .theme-filter-panel .color-theme {
+  float: none !important;
+  width: 100% !important;
+  max-width: 260px !important;
+  padding: 0 !important;
+}
+
+.audio-chat .theme-filter-panel .color-theme.pl10 .filter-label {
+  display: none !important;
+}
+
+.audio-chat .theme-filter-panel .filter-label {
   text-align: center !important;
   width: 100% !important;
   display: block !important;
 }
 
-body.night_theme .audio-chat .theme-filter-panel > div {
-  display: flex !important;
-  justify-content: center !important;
-  align-items: center !important;
-  flex-wrap: wrap !important;
-  gap: 8px !important;
-  width: 100% !important;
+/* ───────── Ползунок громкости в шапке ───────── */
+
+/* Без значка динамика */
+.audio-chat .volume_slider::after,
+.audio-chat .volume_slider:after {
+  display: none !important;
+  content: none !important;
+}
+
+/* Без отступа под убранный значок; справа — отступ от края окна */
+.audio-chat .volume_slider {
+  margin-left: 0 !important;
+  margin-right: 18px !important;
+}
+
+/* Точка: аккуратный круг с лёгкой тенью, без колец и свечения */
+.volume_slider .vue-slider-dot {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.45) !important;
+  border: none !important;
+}
+.volume_slider .vue-slider-dot-handle,
+.volume_slider .vue-slider-dot-handle-focus,
+.volume_slider .vue-slider-dot-handle-disabled {
+  background: transparent !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+.volume_slider .vue-slider-dot:focus,
+.volume_slider .vue-slider-dot-handle:focus {
+  outline: none !important;
+}
+
+/* ───────── Шапка: вместо «Голосовой чат рулетка от Nekto.me» — подпись автора по центру ───────── */
+
+.audio-chat > .header,
+.audio-chat .header.header_chat {
+  position: relative !important;
+  min-height: 38px;
+}
+
+/* Заголовок «Голосовой чат рулетка» + «от Nekto.me» (текст без тега) и «Голосовой чат с Nekto» в звонке */
+.audio-chat > .header h1.chat,
+.audio-chat > .header span.chat,
+.audio-chat .header.header_chat h1.chat,
+.audio-chat .header.header_chat span.chat {
+  display: none !important;
+}
+.audio-chat > .header > div:not(:has(.volume_slider)),
+.audio-chat .header.header_chat > div:not(:has(.volume_slider)) {
+  font-size: 0 !important;
+  color: transparent !important;
+}
+
+.audio-chat > .header::after,
+.audio-chat .header.header_chat::after {
+  content: "Made by @pxdx | TG @pxdxz";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: "Segoe UI Variable Display", "Segoe UI", "Inter", system-ui, sans-serif;
+  font-size: 15px;
+  font-weight: 650;
+  letter-spacing: 0.02em;
+  line-height: 1.2;
+  white-space: nowrap;
+  color: color-mix(in srgb, var(--nx-text, #e2e3e7) 78%, transparent);
+  text-shadow: 0 0 12px color-mix(in srgb, var(--nx-accent, #8fa6bf) 25%, transparent);
+  pointer-events: none;
+}
+
+/* На очень узком экране в звонке подпись по центру упрётся в ползунок громкости справа */
+@media (max-width: 420px) {
+  .audio-chat > .header:has(.volume_slider)::after,
+  .audio-chat .header.header_chat:has(.volume_slider)::after {
+    display: none;
+  }
+}
+
+/* Блик, изредка пробегающий по подписи (только при включённых анимациях) */
+html.nx-anim .audio-chat > .header::after,
+html.nx-anim .audio-chat .header.header_chat::after {
+  color: transparent;
+  background-image: linear-gradient(
+    105deg,
+    color-mix(in srgb, var(--nx-text, #e2e3e7) 78%, transparent) 0%,
+    color-mix(in srgb, var(--nx-text, #e2e3e7) 78%, transparent) 40%,
+    #ffffff 47%,
+    var(--nx-accent, #8fa6bf) 52%,
+    color-mix(in srgb, var(--nx-text, #e2e3e7) 78%, transparent) 60%,
+    color-mix(in srgb, var(--nx-text, #e2e3e7) 78%, transparent) 100%
+  );
+  background-size: 300% 100%;
+  background-position: 100% 0;
+  -webkit-background-clip: text;
+  background-clip: text;
+  animation: nx-sign-shine 9s ease-in-out 2s infinite;
+}
+
+@keyframes nx-sign-shine {
+  0% {
+    background-position: 100% 0;
+  }
+  16%,
+  100% {
+    background-position: 0% 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html.nx-anim .audio-chat > .header::after,
+  html.nx-anim .audio-chat .header.header_chat::after {
+    animation: none;
+  }
+}
+
+/* ───────── Кнопка микрофона активна с первой секунды разговора ───────── */
+/* Сайт помечает её .disabled до 60 с; расширение разрешает выключать микрофон сразу */
+
+html body .callScreen .btn.callScreen__microBtn.disabled {
+  opacity: 1 !important;
+  cursor: pointer !important;
+  border-color: var(--nx-accent, #6ecbfe) !important;
+  color: var(--nx-accent, #6ecbfe) !important;
+  fill: var(--nx-accent, #6ecbfe) !important;
+  background: transparent !important;
+}
+
+html body .callScreen .btn.callScreen__microBtn.disabled.filled {
+  border-color: var(--nx-accent-strong, #1e94d4) !important;
+  background: var(--nx-accent-strong, #1e94d4) !important;
+  color: var(--nx-on-accent, #ffffff) !important;
+  fill: var(--nx-on-accent, #ffffff) !important;
+}
+
+/* ───────── Прозрачность окна чата (ползунок на вкладке «Фон») ───────── */
+/* Полупрозрачен только фон карточки; текст, кнопки и поля остаются как были */
+
+html.nx-card-see body .chat_container .audio-chat {
+  background: color-mix(in srgb, var(--nx-surface, #15181d) var(--nx-card-opacity, 100%), transparent) !important;
+}
+
+html.nx-card-see body .chat_container .audio-chat > div,
+html.nx-card-see body .audio-chat .chat-step,
+html.nx-card-see body .audio-chat .chat-step > div,
+html.nx-card-see body .audio-chat .main-panel,
+html.nx-card-see body .audio-chat .row,
+html.nx-card-see body .audio-chat .step_chatbox,
+html.nx-card-see body .audio-chat .wraps,
+html.nx-card-see body .callScreen,
+html.nx-card-see body .callScreen__top,
+html.nx-card-see body .callScreen__buttons,
+html.nx-card-see body #audio-chat-container,
+html.nx-card-see body #audio-chat-container div.mask_error {
+  background: transparent !important;
+  background-color: transparent !important;
+}
+
+/* Шапка с подписью — чуть плотнее остального окна, чтобы подпись читалась */
+html.nx-card-see body .audio-chat > div.header,
+html.nx-card-see body .audio-chat .header.header_chat {
+  background: color-mix(in srgb, var(--nx-surface-2, #1b1e23) min(100%, calc(var(--nx-card-opacity, 100%) + 10%)), transparent) !important;
 }
