@@ -1,0 +1,23 @@
+/* Crimson — приглушённый винно-красный, тёмный и без кислотного алого */
+html.nx-theme {
+  --nx-page: #140e0f;
+  --nx-page-solid: #140e0f;
+  --nx-surface: #181112;
+  --nx-surface-2: #1f1617;
+  --nx-surface-3: #2d2021;
+  --nx-border: rgba(255, 225, 225, 0.08);
+  --nx-border-strong: rgba(255, 225, 225, 0.2);
+  --nx-text: #ddd0d0;
+  --nx-text-muted: #9a8586;
+  --nx-accent: #b86b6e;
+  --nx-accent-strong: #5e2d31;
+  --nx-accent-hover: #6e363a;
+  --nx-on-accent: #f4e6e6;
+  --nx-danger: #d07a5a;
+  --nx-pill: linear-gradient(135deg, #5e2d31, #6e363a);
+  --nx-msg-in: #2d2021;
+  --nx-msg-in-text: #ddd0d0;
+  --nx-msg-out: #4a2629;
+  --nx-msg-out-text: #f4e6e6;
+  --nx-shadow: 0 16px 40px rgba(0, 0, 0, 0.55);
+}

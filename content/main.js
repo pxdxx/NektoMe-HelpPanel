@@ -12,6 +12,7 @@
     lavender: { id: 'lavender', name: 'Lavender', dot: '#a99cc4' },
     amber: { id: 'amber', name: 'Amber', dot: '#c9a46e' },
     aurora: { id: 'aurora', name: 'Aurora', dot: '#8fa3c9' },
+    crimson: { id: 'crimson', name: 'Crimson', dot: '#b86b6e' },
   };
 
   /* Декоративный фон страницы — рисует content/backdrop.js цветами активной темы */
@@ -733,54 +734,93 @@
   }
 
   function pipCss(c) {
+    /*
+     * Спокойный стиль: фон темнее темы, текст приглушён, кнопки без рамок.
+     * Пока курсор не над окном, управление притухает — окно не отвлекает от игры.
+     */
+    const bg = `color-mix(in srgb, ${c.bg} 72%, #000)`;
+    const soft = `color-mix(in srgb, ${c.text} 82%, ${c.bg})`;
+    const faint = `color-mix(in srgb, ${c.muted} 70%, ${c.bg})`;
+    const track = `color-mix(in srgb, ${c.text} 10%, transparent)`;
+    const font = (file, range) => `@font-face { font-family: "NxNunito"; font-weight: 200 1000; font-display: swap;
+        src: url("${chrome.runtime.getURL(`fonts/${file}`)}") format("woff2"); unicode-range: ${range}; }`;
     return `
+      ${font('nunito-cyrillic.woff2', 'U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116')}
+      ${font('nunito-latin.woff2', 'U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD')}
       * { box-sizing: border-box; }
-      html, body { margin: 0; height: 100%; background: ${c.bg}; color: ${c.text};
-        font: 13px "Segoe UI Variable Display", "Segoe UI", "Inter", system-ui, sans-serif; overflow: hidden; }
-      .pip { height: 100%; display: flex; flex-direction: column; gap: 8px; padding: 10px 14px; }
-      /* нижняя строка: состояние или предупреждение сайта + пинг */
-      .pip__footer { margin-top: auto; display: flex; align-items: flex-end; justify-content: space-between; gap: 10px; }
-      .pip__status { min-width: 0; color: ${c.muted}; font-size: 11px; font-weight: 500; line-height: 14px;
-        display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; }
-      .pip__status[data-error="true"] { color: ${c.danger}; }
-      .pip__voice { display: inline-flex; align-items: center; justify-content: center; gap: 3px; height: 22px; }
-      .pip__voice i { display: block; width: 4px; height: 4px; border-radius: 99px; background: ${c.muted}; opacity: .45;
-        transition: height .08s linear, background .2s, opacity .2s; }
-      .pip__voice[data-speaking="true"] i { background: ${c.accent}; opacity: 1; }
-      .pip__vol { display: flex; align-items: center; gap: 8px; color: ${c.muted}; font-size: 11px; }
-      .pip__vol input { flex: 1; min-width: 0; height: 4px; -webkit-appearance: none; appearance: none; border-radius: 99px;
-        background: ${c.control}; outline: none; cursor: pointer; }
-      .pip__vol input::-webkit-slider-thumb { -webkit-appearance: none; width: 12px; height: 12px; border-radius: 50%; background: ${c.accent}; border: none; }
-      .pip__vol input:disabled { opacity: .4; cursor: default; }
-      .pip__vol span:last-child { min-width: 32px; text-align: right; font-variant-numeric: tabular-nums; }
-      .pip__ping[data-bad="true"] { color: ${c.danger}; }
-      .pip__ping { color: ${c.muted}; font-size: 11px; font-variant-numeric: tabular-nums; white-space: nowrap; }
+      html, body { margin: 0; height: 100%; background: ${bg}; color: ${soft};
+        font: 600 13px "NxNunito", "Nunito", "Segoe UI", system-ui, sans-serif; overflow: hidden;
+        -webkit-font-smoothing: antialiased; }
+      .pip { height: 100%; display: flex; flex-direction: column; gap: 10px; padding: 12px 14px 10px; }
+
       /* таймер слева · индикатор голоса ровно по центру · авто-скип справа */
       .pip__mid { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 10px; }
       .pip__mid .pip__time { justify-self: start; }
       .pip__mid .pip__auto { justify-self: end; }
-      .pip__time { font-size: 28px; font-weight: 650; letter-spacing: 0.02em; line-height: 1; font-variant-numeric: tabular-nums; }
-      .pip__auto { display: inline-flex; align-items: center; gap: 7px; color: ${c.muted}; font-size: 12px; cursor: pointer; user-select: none; }
+      .pip__time { font-size: 28px; font-weight: 800; letter-spacing: 0.02em; line-height: 1; font-variant-numeric: tabular-nums;
+        transition: color .4s; }
+      .pip[data-phase="idle"] .pip__time, .pip[data-phase="search"] .pip__time { color: ${faint}; }
+
+      .pip__voice { display: inline-flex; align-items: center; justify-content: center; gap: 3px; height: 22px; }
+      .pip__voice i { display: block; width: 3px; height: 4px; border-radius: 99px; background: ${c.muted}; opacity: .3;
+        transition: height .1s ease-out, background .3s, opacity .3s; }
+      .pip__voice[data-speaking="true"] i { background: ${c.accent}; opacity: .85; }
+
+      .pip__auto { display: inline-flex; align-items: center; gap: 6px; color: ${faint}; font-size: 11px; cursor: pointer;
+        user-select: none; transition: color .2s; }
+      .pip__auto:hover { color: ${c.muted}; }
       .pip__auto input { position: absolute; opacity: 0; pointer-events: none; }
-      .pip__switch { position: relative; width: 30px; height: 18px; border-radius: 99px; background: ${c.control};
-        border: 1px solid ${c.border}; transition: background .15s, border-color .15s; }
-      .pip__switch::after { content: ""; position: absolute; top: 2px; left: 2px; width: 12px; height: 12px; border-radius: 50%;
-        background: ${c.muted}; transition: transform .15s, background .15s; }
-      .pip__auto input:checked + .pip__switch { background: ${c.strong}; border-color: ${c.strong}; }
-      .pip__auto input:checked + .pip__switch::after { transform: translateX(12px); background: ${c.onAccent}; }
-      .pip__auto input:focus-visible + .pip__switch { outline: 2px solid ${c.accent}; outline-offset: 2px; }
-      .pip[data-phase="idle"] .pip__time, .pip[data-phase="search"] .pip__time { color: ${c.muted}; }
-      .pip__buttons { display: flex; gap: 8px; }
-      .pip__btn { flex: 1; height: 34px; display: inline-flex; align-items: center; justify-content: center; padding: 0;
-        border-radius: 99px; border: 1px solid ${c.border}; background: ${c.control}; color: ${c.text}; cursor: pointer;
-        transition: background .15s, border-color .15s, color .15s, opacity .15s; }
+      .pip__switch { position: relative; width: 24px; height: 14px; border-radius: 99px; background: ${track};
+        transition: background .2s; }
+      .pip__switch::after { content: ""; position: absolute; top: 3px; left: 3px; width: 8px; height: 8px; border-radius: 50%;
+        background: ${c.muted}; transition: transform .2s, background .2s; }
+      .pip__auto input:checked + .pip__switch { background: color-mix(in srgb, ${c.accent} 30%, transparent); }
+      .pip__auto input:checked + .pip__switch::after { transform: translateX(10px); background: ${c.accent}; }
+      .pip__auto input:focus-visible + .pip__switch { outline: 1px solid ${c.accent}; outline-offset: 2px; }
+
+      /* громкость на всю ширину, под ней — кнопки по центру свободного места */
+      .pip__controls { flex: 1; min-height: 0; display: flex; flex-direction: column; gap: 6px; }
+      .pip__vol { min-width: 0; display: flex; align-items: center; gap: 8px; color: ${faint}; font-size: 11px; }
+      .pip__vol svg { flex: none; display: block; }
+      .pip__vol input { --v: 50%; flex: 1; min-width: 0; height: 3px; margin: 0; -webkit-appearance: none; appearance: none;
+        border-radius: 99px; outline: none; cursor: pointer;
+        background: linear-gradient(to right, ${c.muted} var(--v), ${track} var(--v)); }
+      .pip__vol input::-webkit-slider-thumb { -webkit-appearance: none; width: 10px; height: 10px; border-radius: 50%;
+        background: ${soft}; border: none; opacity: 0; transition: opacity .2s; }
+      .pip__vol:hover input::-webkit-slider-thumb, .pip__vol input:active::-webkit-slider-thumb { opacity: 1; }
+      .pip__vol input:disabled { opacity: .35; cursor: default; }
+      .pip__vol span { min-width: 28px; text-align: right; font-variant-numeric: tabular-nums; }
+
+      .pip__buttons { flex: 1; display: flex; align-items: center; justify-content: center; gap: 14px; }
+      .pip__btn { width: 40px; height: 34px; display: inline-flex; align-items: center; justify-content: center; padding: 0;
+        border-radius: 10px; border: none; background: transparent; color: ${c.muted}; cursor: pointer;
+        transition: background .2s, color .2s, opacity .2s; }
       .pip__btn svg { display: block; pointer-events: none; }
-      .pip__btn:hover:not(:disabled) { border-color: ${c.accent}; }
-      .pip__btn:disabled { opacity: .4; cursor: default; }
-      .pip__btn--main { background: ${c.strong}; border-color: ${c.strong}; color: ${c.onAccent}; }
-      .pip__btn--main:hover:not(:disabled) { background: ${c.hover}; border-color: ${c.hover}; }
-      .pip__btn[data-muted="true"] { border-color: ${c.danger}; color: ${c.danger}; background: color-mix(in srgb, ${c.danger} 14%, ${c.control}); }
-      .pip__btn--stop:not(:disabled) { color: ${c.danger}; }
+      .pip__btn:hover:not(:disabled) { background: ${track}; color: ${soft}; }
+      .pip__btn:focus-visible { outline: 1px solid ${c.accent}; outline-offset: 1px; }
+      .pip__btn:disabled { opacity: .3; cursor: default; }
+      .pip__btn--main { color: ${c.accent}; }
+      .pip__btn--main:hover:not(:disabled) { color: ${c.accent}; background: color-mix(in srgb, ${c.accent} 14%, transparent); }
+      .pip__btn--stop:hover:not(:disabled) { color: ${c.danger}; background: color-mix(in srgb, ${c.danger} 12%, transparent); }
+      .pip__btn[data-muted="true"] { color: ${c.danger}; background: color-mix(in srgb, ${c.danger} 12%, transparent); }
+
+      /* без курсора над окном управление притухает */
+      .pip__controls, .pip__auto { opacity: .6; transition: opacity .4s, color .2s; }
+      body:hover .pip__controls, body:hover .pip__auto { opacity: 1; }
+
+      /* нижняя строка: состояние (точка + текст) или предупреждение сайта + пинг */
+      .pip__footer { display: flex; align-items: flex-end; justify-content: space-between; gap: 10px;
+        color: ${faint}; font-size: 11px; line-height: 14px; }
+      .pip__status { min-width: 0; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; }
+      .pip__status::before { content: ""; display: inline-block; width: 6px; height: 6px; margin: 0 7px 1px 0; border-radius: 50%;
+        background: ${c.muted}; opacity: .5; vertical-align: middle; }
+      .pip[data-phase="talk"] .pip__status::before { background: ${c.accent}; opacity: .9; }
+      .pip[data-phase="search"] .pip__status::before { background: ${c.accent}; animation: pip-pulse 1.6s ease-in-out infinite; }
+      .pip__status[data-error="true"] { color: color-mix(in srgb, ${c.danger} 80%, ${c.bg}); }
+      .pip__status[data-error="true"]::before { background: ${c.danger}; opacity: .9; animation: none; }
+      .pip__ping { font-variant-numeric: tabular-nums; white-space: nowrap; }
+      .pip__ping[data-bad="true"] { color: color-mix(in srgb, ${c.danger} 80%, ${c.bg}); }
+      @keyframes pip-pulse { 0%, 100% { opacity: .25; } 50% { opacity: .9; } }
     `;
   }
 
@@ -832,6 +872,7 @@
       if (vol.value !== v) vol.value = v;
       setText(d.getElementById('vol-value'), `${v}%`);
     }
+    vol.style.setProperty('--v', `${vol.value}%`); // заполненная часть полоски
 
     const auto = d.getElementById('auto');
     if (auto.checked !== state.autoSkip) auto.checked = state.autoSkip;
@@ -856,7 +897,8 @@
   const PIP_ICONS = {
     find: `<svg ${PIP_ICON_ATTRS}><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>`,
     skip: `<svg ${PIP_ICON_ATTRS}><path d="M5 4.5v15l11-7.5z" fill="currentColor"/><path d="M19 5v14"/></svg>`,
-    stop: `<svg ${PIP_ICON_ATTRS}><rect x="6" y="6" width="12" height="12" rx="2.5" fill="currentColor"/></svg>`,
+    stop: `<svg ${PIP_ICON_ATTRS}><rect x="6.5" y="6.5" width="11" height="11" rx="2.5" fill="currentColor"/></svg>`,
+    volume: `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/><path d="M15.5 9a4 4 0 0 1 0 6"/></svg>`,
     mic: `<svg ${PIP_ICON_ATTRS}><rect x="9" y="2.5" width="6" height="12" rx="3"/><path d="M5 10.5a7 7 0 0 0 14 0"/><path d="M12 17.5V21"/></svg>`,
     micOff: `<svg ${PIP_ICON_ATTRS}><path d="M15 9.3V5.5a3 3 0 0 0-5.7-1.3"/><path d="M9 9v2.5a3 3 0 0 0 5.1 2.1"/><path d="M5 10.5a7 7 0 0 0 11.8 5.1M19 10.5a7 7 0 0 1-.4 2.3"/><path d="M12 17.5V21"/><path d="M3 3l18 18"/></svg>`,
   };
@@ -987,11 +1029,13 @@
           <div class="pip__voice" id="voice" data-speaking="false"><i></i><i></i><i></i><i></i></div>
           <label class="pip__auto"><input type="checkbox" id="auto" /><span class="pip__switch"></span>Авто-скип</label>
         </div>
-        <div class="pip__vol"><span>Громкость</span><input type="range" id="vol" min="0" max="100" step="1" /><span id="vol-value"></span></div>
-        <div class="pip__buttons">
-          <button type="button" class="pip__btn pip__btn--main" id="skip"></button>
-          <button type="button" class="pip__btn pip__btn--stop" id="stop" aria-label="Завершить без нового поиска">${PIP_ICONS.stop}</button>
-          <button type="button" class="pip__btn" id="mic"></button>
+        <div class="pip__controls">
+          <div class="pip__vol">${PIP_ICONS.volume}<input type="range" id="vol" min="0" max="100" step="1" aria-label="Громкость собеседника" /><span id="vol-value"></span></div>
+          <div class="pip__buttons">
+            <button type="button" class="pip__btn pip__btn--main" id="skip"></button>
+            <button type="button" class="pip__btn pip__btn--stop" id="stop" aria-label="Завершить без нового поиска">${PIP_ICONS.stop}</button>
+            <button type="button" class="pip__btn" id="mic"></button>
+          </div>
         </div>
         <div class="pip__footer"><span class="pip__status" id="status"></span><span class="pip__ping" id="ping"></span></div>
       </div>`;
@@ -1011,6 +1055,7 @@
     });
     vol.addEventListener('input', () => {
       setText(d.getElementById('vol-value'), `${vol.value}%`);
+      vol.style.setProperty('--v', `${vol.value}%`);
       document.dispatchEvent(new CustomEvent('nx-ext:set-volume', { detail: Number(vol.value) }));
     });
     pipWin.addEventListener('pagehide', () => {
@@ -1042,6 +1087,10 @@
     { id: 'wal3', name: 'Море', thumb: 'wallpaper/thumbs/wal3.jpg', full: 'wallpaper/wal3.jpg' },
     { id: 'wal4', name: 'Хром', thumb: 'wallpaper/thumbs/wal4.jpg', full: 'wallpaper/wal4.jpg' },
     { id: 'wal5', name: 'Пальмы', thumb: 'wallpaper/thumbs/wal5.jpg', full: 'wallpaper/display/wal5.jpg' }, // оригинал 8K — облегчённая копия
+    { id: 'wal6', name: 'Чёрная дыра', thumb: 'wallpaper/thumbs/wal6.jpg', full: 'wallpaper/wal6.jpg' },
+    { id: 'wal7', name: 'Маки', thumb: 'wallpaper/thumbs/wal7.jpg', full: 'wallpaper/wal7.jpg' },
+    { id: 'wal8', name: 'Кот', thumb: 'wallpaper/thumbs/wal8.jpg', full: 'wallpaper/wal8.jpg' },
+    { id: 'wal9', name: 'Собор', thumb: 'wallpaper/thumbs/wal9.jpg', full: 'wallpaper/wal9.jpg' },
   ];
 
   const BG_IMAGE_KEY = 'nektoExtBgImageV1';

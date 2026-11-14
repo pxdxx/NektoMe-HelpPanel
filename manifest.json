@@ -56,7 +56,8 @@
       "resources": [
         "themes/*.css",
         "sounds/*",
-        "wallpaper/*"
+        "wallpaper/*",
+        "fonts/*"
       ],
       "matches": [
         "https://nekto.me/*",
